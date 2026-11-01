@@ -876,7 +876,7 @@ document.getElementById("accRange").onchange=renderStats;
   }
   function showLoading(msg){
     document.body.insertAdjacentHTML('afterbegin',
-      '<div id="bootMask" style="position:fixed;inset:0;background:#f5f3f0;z-index:99998;'+
+      '<div id="bootMask" style="position:fixed;inset:0;background:#f5f3f0;z-index:9998;'+
       'display:flex;align-items:center;justify-content:center;font-size:15px;color:#666;'+
       'font-family:system-ui,-apple-system,\"Microsoft YaHei\",sans-serif">'+msg+'</div>');
   }
@@ -887,7 +887,7 @@ document.getElementById("accRange").onchange=renderStats;
   var booted=false; if(PLAN && PLAN.length){ booted=true; bootRender(); }
   else {
     showLoading('正在读取备考计划…');
-    var done=false;
+    var done=false; window.doneMark=function(){done=true;};
     setTimeout(function(){ if(!done){ done=true; hideLoading();
       showLoading('读取超时：请点底部「设置」检查令牌，或换个网络再试'); } }, 12000);
   }
@@ -904,7 +904,7 @@ document.getElementById("accRange").onchange=renderStats;
           if(d.checkins){ CHECKINS=d.checkins; localStorage.setItem(LS.ck,JSON.stringify(CHECKINS)); }
             if(d.countdowns){ CDS=d.countdowns; localStorage.setItem(LS.cd,JSON.stringify(CDS)); }
         }catch(e){}
-        if(!booted && PLAN && PLAN.length){ booted=true; hideLoading(); bootRender(); return; }
+        if(!booted && PLAN && PLAN.length){ booted=true; doneMark(); hideLoading(); bootRender(); return; }
         renderToday();renderOverview();renderCountdowns();renderSettings();tickHeader();
       }
     });
