@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>资料分析公式与例题 · 2027国考</title>
+<style>
+:root{--red:#c0392b;--red-dark:#96281b;--bg:#f5f3f0;--card:#fff;--ink:#2c2c2c;--muted:#8a8a8a;--line:#e8e4df;--ok:#2e8b57;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;}
+header{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;padding:18px 24px 14px;}
+header h1{font-size:21px;font-weight:700;}
+header .sub{font-size:12px;opacity:.88;margin-top:5px;line-height:1.7;}
+#stat{font-size:12px;margin-top:7px;opacity:.95;}
+nav{display:flex;gap:2px;align-items:center;background:var(--card);border-bottom:1px solid var(--line);padding:0 10px;position:sticky;top:0;z-index:10;flex-wrap:wrap;}
+nav button.tb{border:none;background:none;padding:12px 11px;font-size:14px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;}
+nav button.tb.active{color:var(--red);border-bottom-color:var(--red);font-weight:700;}
+nav .spacer{flex:1;}
+#q{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;width:160px;font-family:inherit;}
+#q:focus{outline:none;border-color:var(--red);}
+#quickAdd{border:none;background:var(--red);color:#fff;border-radius:8px;padding:7px 13px;font-size:13px;cursor:pointer;margin-left:8px;}
+#quickAdd:hover{background:var(--red-dark);}
+main{max-width:1080px;margin:0 auto;padding:18px 16px 70px;}
+section{display:none;} section.active{display:block;}
+.block{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.block h2{font-size:16px;color:var(--red);margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;line-height:1.65;}
+th{background:#faf7f4;font-weight:700;color:#5a4a44;}
+tbody tr:nth-child(even){background:#fcfbfa;}
+td b,li b,h2 b{color:var(--red-dark);}
+ul{margin:2px 0 2px 20px;} li{margin:5px 0;line-height:1.7;}
+pre{background:#2c2c2c;color:#ffe9a8;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.95;overflow-x:auto;font-family:"Cascadia Mono",Consolas,"Microsoft YaHei",monospace;white-space:pre-wrap;}
+.note{margin-top:10px;background:#fff8e6;border:1px dashed #e6c86e;border-radius:8px;padding:10px 13px;font-size:13.5px;line-height:1.75;white-space:pre-wrap;}
+.hint{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+.cu-form{display:grid;grid-template-columns:110px 120px 1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+input[type=text],input[type=date],select{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;width:100%;}
+input:focus,select:focus{outline:none;border-color:var(--red);}
+.cu-actions{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+.btn{border:1px solid var(--red);background:var(--red);color:#fff;border-radius:8px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:inherit;}
+.btn:hover{background:var(--red-dark);}
+.btn.ghost{background:#fff;color:var(--muted);border-color:var(--line);}
+.btn.ghost:hover{color:var(--red);border-color:var(--red);}
+.del{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:6px;padding:3px 9px;cursor:pointer;font-size:12px;}
+.del:hover{color:var(--red);border-color:var(--red);}
+.empty{color:var(--muted);font-size:14px;padding:18px 4px;}
+footer{max-width:1080px;margin:0 auto;padding:0 16px 40px;font-size:12px;color:var(--muted);line-height:1.9;}
+footer code{background:#eee9e4;border-radius:4px;padding:1px 5px;font-size:11.5px;}
+#toast{position:fixed;right:20px;bottom:20px;background:#2e8b57;color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;}
+#toast.on{opacity:1;}
+@media(max-width:600px){.cu-form{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+<h1>资料分析公式与例题</h1>
+<div class="sub">统计术语 · 速算技巧 · 增长率 · 增长量 · 比重 · 平均数倍数 ｜ 2027 国考行政执法类</div>
+<div class="sub">来源：《资料分析系统课配套讲义——刘文超》（第一至四章）+ 讲义配套真题例题</div>
+<div id="stat">—</div>
+</header>
+<nav>
+<button class="tb active" data-tab="总">总览</button>
+<button class="tb" data-tab="术">统计术语</button>
+<button class="tb" data-tab="速">速算技巧</button>
+<button class="tb" data-tab="长">增长率</button>
+<button class="tb" data-tab="量">增长量</button>
+<button class="tb" data-tab="重">比重</button>
+<button class="tb" data-tab="平">平均数倍数</button>
+<button class="tb" data-tab="我">我的错题</button>
+<span class="spacer"></span>
+<input id="q" type="text" placeholder="搜索：比重 / 混合 / 截位">
+<button id="quickAdd">＋ 记一条</button>
+</nav>
+<main>
+<section id="tab-总" class="active"><div class="block"><h2>公式速查（背这一页）</h2><pre>【术语】增长量 = 现期 − 基期（有正负，负值=减少量）
+        增长率 r = 增长量 ÷ 基期 = 现期÷基期 − 1
+        基期量 = 现期量 ÷ (1+r)
+【增长量】增长量 = 现期÷(1+r) × r ；r≈1/n 时 = 现期÷(n+1)
+【间隔增长率】r = r1 + r2 + r1×r2  （r1、r2 是两个相邻期间增速）
+【混合增长率】介于两者之间，偏向基期量大的（没基期用现期近似）
+【年均增长率】现期 = 基期 × (1+年均增长率)^n
+【比重】现期比重 = A/B
+        基期比重 = A/B × (1+b)/(1+a)   ← a=部分增速，b=整体增速
+        两期比重差 = A/B × (a−b)/(1+a)
+        判断升降：a&gt;b 比重上升；a&lt;b 比重下降（只看增速，不用算）
+【倍数】现期倍数 = A/B ；基期倍数 = A/B × (1+b)/(1+a)
+【平均数】平均数增长率 = (a−b)/(1+b)   ← a=总量增速，b=份数增速</pre></div><div class="block"><h2>题目问什么 → 用哪个公式（按句子里的事来判）</h2><table><thead><tr><th>题干里出现这些字</th><th>题型</th><th>公式</th></tr></thead><tbody><tr><td>「增长了百分之几」「增速」「增幅」「回落/提高几个百分点」</td><td>增长率</td><td>r = 现期÷基期 − 1</td></tr><tr><td>「比……增长/减少多少（带单位）」「增加……万元」</td><td>增长量</td><td>现期÷(1+r) × r</td></tr><tr><td>「比前年（隔一年）增长」</td><td>间隔增长率</td><td>r = r1+r2+r1×r2</td></tr><tr><td>「两类合成一类，求整体增速」</td><td>混合增长率</td><td>居中偏大（线段法）</td></tr><tr><td>「占……比重」「比重是多少」</td><td>现期比重</td><td>A/B</td></tr><tr><td>「上年（基期）比重」</td><td>基期比重</td><td>A/B × (1+b)/(1+a)</td></tr><tr><td>「比重比去年上升/下降几个百分点」</td><td>两期比重差</td><td>A/B × (a−b)/(1+a)</td></tr><tr><td>「是……的几倍」「A 比 B 多几倍」</td><td>倍数</td><td>A/B（多几倍再减 1）</td></tr><tr><td>「平均每……」「人均」「单位面积」</td><td>平均数</td><td>总量/份数</td></tr><tr><td>「平均数的增速」</td><td>平均数增长率</td><td>(a−b)/(1+b)</td></tr></tbody></table></div><div class="block"><h2>三条铁律（每天做资料前先念一遍）</h2><ul><li><b>先圈问句</b>：问的是<b>累计</b>还是<b>新增</b>？是<b>比重</b>还是<b>比重差</b>？圈错方向，算得再快也是错的。</li><li><b>一次算完不回头</b>：草稿写完整一行（截位 → 分数 → 一次除完 → 直接选），只有选项差 &lt;1% 才精算。</li><li><b>最后一题综合判断照旧放弃</b>：在草稿写「放弃」两个字，别花 70 秒去蒙。</li></ul></div></section>
+<section id="tab-术"><div class="block"><h2>基期与现期</h2><table><thead><tr><th>概念</th><th>含义</th><th>例子</th></tr></thead><tbody><tr><td>基期 / 基期量</td><td>作为对比参照的那个时期</td><td>「2017 年比 2016 年增长 6.8%」→ 2016 年是基期</td></tr><tr><td>现期 / 现期量</td><td>相对基期的那一期</td><td>上例里 2017 年是现期</td></tr><tr><td>找法</td><td>句子里的「比」字后面是基期</td><td>「A 比 B 增长」→ B 是基期</td></tr></tbody></table></div><div class="block"><h2>增长量 vs 增长率（最容易混的一对）</h2><table><thead><tr><th>项</th><th>增长量</th><th>增长率</th></tr></thead><tbody><tr><td>定义</td><td>现期与基期的<b>绝对差</b></td><td>增长量与基期的<b>比值</b></td></tr><tr><td>公式</td><td>现期 − 基期</td><td>增长量 ÷ 基期 = 现期/基期 − 1</td></tr><tr><td>单位</td><td><b>有单位</b>（万元、万人）</td><td><b>无单位</b>（%）</td></tr><tr><td>正负</td><td>有正负，负值=减少量</td><td>可为负，「减少率」本质是不带负号的增长率</td></tr></tbody></table></div><div class="block"><h2>高频易错：倍数和百分比不是一回事</h2><div class="note">「2017 年产值比 2016 年增长 280%」<br>=「增长 2.8 倍」<br>=「2017 年是 2016 年的 3.8 倍」<br><br><b>规律：是原来的 (1+r) 倍；比原来多 r 倍。</b><br>反问：A 比 B 增长 3.2 倍，A 是 B 的几倍？答案 4.2 倍。</div></div><div class="block"><h2>年均增长量与年均增长率</h2><pre>年均增长量 = (现期量 − 基期值) ÷ 间隔年份
+
+年均增长率：现期量 = 基期量 × (1 + 年均增长率)^n
+（n = 相差年份；n 比「数出来的年份个数」少 1）</pre></div></section>
+<section id="tab-速"><div class="block"><h2>截位直除法（最常用，先学这个）</h2><table><thead><tr><th>项</th><th>规则（讲义原文）</th></tr></thead><tbody><tr><td>保留位数</td><td>四舍五入<b>最多保留三位有效数字</b></td></tr><tr><td>判定位数①（看选项首位）</td><td>选项首位<b>均不同</b> → 保留 <b>两位</b>；首位<b>有相同</b> → 保留 <b>三位</b></td></tr><tr><td>判定位数②（看选项误差）</td><td>选项之间误差 <b>&gt;10%</b> → 保留两位；<b>&lt;10%</b> → 保留三位</td></tr><tr><td>一步除式</td><td><b>只估算分母</b>（分子不动）</td></tr><tr><td>多步连除</td><td><b>分子分母同时截位</b>，除到能选出答案就停</td></tr></tbody></table></div><div class="block"><h2>例：截位直除怎么用</h2><div class="note">【真题·2015 年 F 省】城镇消费品零售额 9448.57 亿元，增长 12.2%；乡村 1057.36 亿元，增长 14.1%。<br>问：2015 年城镇约是乡村的多少倍？ A.8.2　B.8.5　C.8.6　D.8.9<br><br>做法：9448.57 ÷ 1057.36<br>· 选项首位都是 8，<b>保留三位</b>：9449 ÷ 1057<br>· 一步除式只截分母：1057 → 1060<br>· 9449 ÷ 1060 ≈ 8.91 → 接近 8.9，选 <b>D</b><br><br>若按「保留两位」会算成 94÷11=8.5，落到 B，就错了。<b>选项首位相同必须留三位。</b></div></div><div class="block"><h2>分数比较（比大小，不算出结果）</h2><table><thead><tr><th>情况</th><th>判法（讲义原文）</th></tr></thead><tbody><tr><td>①</td><td><b>分子大、分母小 → 分数大</b>（直接判）</td></tr><tr><td>②</td><td>分子分母<b>同向变大</b>时看变化速度：<b>分子变化大 → 分数大</b>；<b>分母变化大 → 分数小</b></td></tr><tr><td>③</td><td>拿不准时用<b>直除比较</b>（各除一位小数）</td></tr></tbody></table></div><div class="block"><h2>特殊分数表（特征数字，必背 1/2 ~ 1/20）</h2><table><thead><tr><th>1/n</th><th>百分数</th><th>1/n</th><th>百分数</th></tr></thead><tbody><tr><td>1/2</td><td>50%</td><td>1/11</td><td>9.1%</td></tr><tr><td>1/3</td><td>33.3%</td><td>1/12</td><td>8.3%</td></tr><tr><td>1/4</td><td>25%</td><td>1/13</td><td>7.7%</td></tr><tr><td>1/5</td><td>20%</td><td>1/14</td><td>7.1%</td></tr><tr><td>1/6</td><td>16.7%</td><td>1/15</td><td>6.7%</td></tr><tr><td>1/7</td><td>14.3%</td><td>1/16</td><td>6.25%</td></tr><tr><td>1/8</td><td>12.5%</td><td>1/17</td><td>5.9%</td></tr><tr><td>1/9</td><td>11.1%</td><td>1/18</td><td>5.6%</td></tr><tr><td>1/10</td><td>10%</td><td>1/19</td><td>5.3%</td></tr><tr><td>—</td><td>—</td><td>1/20</td><td>5%</td></tr></tbody></table></div><div class="block"><h2>特殊分数怎么用</h2><div class="note"><b>看到 r≈1/n，就把除法变成一次除法：增长量 = 现期 ÷ (n+1)</b><br><br>例：增长率 5.5% ≈ 1/18 → 增长量 = 5485 ÷ 19 ≈ 289<br>　　增长率 3.7% ≈ 1/27 → 增长量 = 934 ÷ 28 ≈ 33<br>　　增长率 2.3% ≈ 1/43 → 增长量 = 1683 ÷ 44 ≈ 38<br><br>不背这张表，就要算 「现期÷(1+5.5%)×5.5%」，多两步且容易错。</div></div></section>
+<section id="tab-长"><div class="block"><h2>一般增长率</h2><pre>增长率 r = 增长量 ÷ 基期量 = 现期量 ÷ 基期量 − 1
+
+基期量 = 现期量 ÷ (1 + r)          ← 求去年的值
+增长量 = 现期量 − 基期量 = 基期量 × r = 现期量 ÷ (1+r) × r</pre></div><div class="block"><h2>间隔增长率（隔一年）</h2><pre>r(隔期) = r1 + r2 + r1 × r2
+
+r1、r2 = 相邻两个期间的增长率（取较大两个年份的）
+题型特征：2017 年比 2015 年增长多少 / 2016 年一季度比 2014 年一季度</pre></div><div class="block"><h2>间隔增长率：r1×r2 的三种大胆估法（讲义原文）</h2><ul><li>① <b>a% × b% = (ab)/100 %</b>（把两个百分数相乘化成百分数）</li><li>② <b>一个化成分数、一个不变</b>（如 12.5% × 8% → 1/8 × 8% = 1%）</li><li>③ <b>r1、r2 都小于 10% 时，r1×r2 ≈ 1%</b>，大胆估。</li></ul></div><div class="block"><h2>例：间隔增长率</h2><div class="note">【真题】2015 年全国困难群众受益 1838.4 万人次，同比增长 8.5%，增长率较上一年下降 27.5 个百分点。<br>问：2015 年受益的困难群众较 2013 年增长约？ A.27.6%　B.34.5%　C.40.4%　D.47.6%<br><br>做法：<br>· 2015 年 r1 = 8.5%；2014 年 r2 = 8.5% + 27.5% = 36%<br>· r = 8.5% + 36% + 8.5%×36% = 44.5% + 3.06% ≈ 47.6%<br>· 选 <b>D</b><br><br><b>注意「下降 27.5 个百分点」＝ 去年更高，要加回去。这是最容易反的一步。</b></div></div><div class="block"><h2>混合增长率</h2><pre>混合增长率：大小居中，偏向基期量大的那一方
+注：考试中没有基期量，用现期量近似代替
+
+线段法：混合值落在两个分量之间，距离与量成反比
+　　　靠近谁 → 谁的量更大</pre></div><div class="block"><h2>例：混合增长率（线段法）</h2><div class="note">【真题】城镇人均可支配收入 49283 元、农村 20133 元、全国 36883 元，问城镇与农村人数之比。<br><br>线段法：<br>农村 20133 ——[16750]—— 全国 36883 ——[12400]—— 城镇 49283<br>人数比 = 右段距离 : 左段距离 = 12400 : 16750 ≈ 1.35 → 约 4:3<br><br><b>口诀：交叉相减，距离比 = 量的反比。</b> 混合值离谁近，谁的量就大。</div></div></section>
+<section id="tab-量"><div class="block"><h2>增长量公式</h2><pre>增长量 = 现期量 − 基期量
+　　　 = 基期量 × r
+　　　 = 现期量 ÷ (1+r) × r      ← 考试最常用
+　　　 ≈ 现期量 ÷ (n+1)          ← 当 r≈1/n 时（特殊分数法）</pre></div><div class="block"><h2>增长量大小比较（讲义原文）</h2><table><thead><tr><th>情况</th><th>怎么比</th></tr></thead><tbody><tr><td>① 现期值大、增长率也大</td><td><b>大大则大</b>，直接判最大</td></tr><tr><td>② 差距小时</td><td>近似比较 <b>现期量 × r</b> 的乘积大小</td></tr><tr><td>③ 乘积接近时</td><td>列出完整式子 现期÷(1+r)×r 再估</td></tr><tr><td>④ 增长率差距 &gt;20%</td><td>必须列完整式子，不能近似</td></tr></tbody></table></div><div class="block"><h2>例：增长量计算</h2><div class="note">【真题】2012 年末全国就业人员 76704 万人，比上年末增加 284 万人；其中城镇 37102 万人，增加 1188 万人；乡村 39602 万人。<br>问：相较于 2011 年，2012 年乡村就业人员（　）<br>A.减少 904 万人　B.增加 904 万人　C.增加 1472 万人　D.减少 1472 万人<br><br>做法：<br>· 全国增 284、城镇增 1188 → 乡村 = 284 − 1188 = <b>−904</b><br>· 负号 = 减少，选 <b>A</b><br><br><b>这题不考除法，考「整体增量 = 各部分增量之和」。</b> 看到「其中」就知道要拆。</div></div></section>
+<section id="tab-重"><div class="block"><h2>现期比重</h2><pre>比重 = 部分值 ÷ 整体值 = A/B
+
+整体值 = 部分值 ÷ 比重
+部分值 = 整体值 × 比重
+技巧：截位直除</pre></div><div class="block"><h2>基期比重（求去年的比重）</h2><pre>基期比重 = [A ÷ (1+a)] ÷ [B ÷ (1+b)]
+　　　　 = A/B × (1+b)/(1+a)
+
+A = 部分现期量，a = 部分增速
+B = 整体现期量，b = 整体增速</pre></div><div class="block"><h2>两期比重差（今年比重 − 去年比重）</h2><pre>两期比重差 = 现期比重 − 基期比重
+　　　　　= A/B × (a − b)/(1+a)
+
+判断升降（不用算）：
+　a &gt; b → 比重上升
+　a &lt; b → 比重下降
+应用技巧：a/(1+a) ≈ 1，所以 |比重差| ≈ |A/B × (a−b)|</pre></div><div class="block"><h2>⚠ 两个公式别混（你在这里错过）</h2><table><thead><tr><th>问的是什么</th><th>用哪个</th><th>长什么样</th></tr></thead><tbody><tr><td>「上限/基期<b>比重是多少</b>」</td><td><b>基期比重</b></td><td>A/B × (1+b)/(1+a)　—— 求一个<b>值</b></td></tr><tr><td>「比重比去年<b>上升/下降几个百分点</b>」</td><td><b>两期比重差</b></td><td>A/B × (a−b)/(1+a)　—— 求一个<b>差值</b></td></tr><tr><td>「比重是上升还是下降」</td><td><b>只用比增速</b></td><td>a 与 b 比大小，<b>根本不用算</b></td></tr><tr><td>「是几倍」「多几倍」</td><td><b>倍数</b></td><td>A/B；「多几倍」再 − 1</td></tr></tbody></table></div><div class="block"><h2>例：两期比重（只判升降，不计算）</h2><div class="note">【真题】2016 年 1–4 月全国全社会用电量同比增长 2.9%；第一产业增 9.1%、第二产业增 0.2%、第三产业增 10.0%、城乡居民增 9.5%。<br>问：三次产业中，用电量占全社会比重高于上年同期水平的产业有几个？<br><br>做法：只看增速与 2.9% 比大小<br>· 第一产业 9.1% &gt; 2.9% → 上升 ✓<br>· 第二产业 0.2% &lt; 2.9% → 下降 ✗<br>· 第三产业 10.0% &gt; 2.9% → 上升 ✓<br>· 共 2 个 → 选 <b>C</b><br><br><b>这类题 15 秒能做完，前提是知道「只比增速」。</b></div></div></section>
+<section id="tab-平"><div class="block"><h2>倍数</h2><pre>现期倍数 = A ÷ B
+
+基期倍数 = (A ÷ (1+a)) ÷ (B ÷ (1+b))
+　　　　 = A/B × (1+b)/(1+a)
+
+注意：「A 是 B 的几倍」= A/B；「A 比 B 多几倍」= A/B − 1</pre></div><div class="block"><h2>平均数</h2><pre>现期平均数 = 总量 ÷ 份数（人均、单位面积、平均每场…）
+
+基期平均数 = 现期平均数 × (1+b)/(1+a)   （a=总量增速，b=份数增速）
+
+平均数增长率 = (a − b) ÷ (1 + b)</pre></div><div class="block"><h2>例：平均数（分数比较）</h2><div class="note">【真题】2013 年 1–4 月某市电影院线：1 月场次 10.91 万场、观众 3.50 百万人次；2 月 9.79、3.36；3 月 11.07、3.17；4 月 11.13、3.72。<br>问：2013 年 1–4 月平均每场电影观众人数最少的月份是？<br><br>做法：比 观众÷场次，不除出来，用分数比较<br>· 1 月 3.50/10.91、2 月 3.36/9.79、3 月 3.17/11.07、4 月 3.72/11.13<br>· 3 月<b>分子最小、分母最大</b> → 分数最小 → 选 <b>3 月</b><br><br><b>「分子最小分母最大」是最快的一档判断，别真去除。</b></div></div></section>
+<section id="tab-我">
+<div class="block">
+<h2>我的错题 · 记「公式套错」和「问句看反」</h2>
+<div class="hint">资料分析错题多半不是算错，是公式用错或问句看反。记两条就够：① 问的是什么（累计/新增、比重/比重差）② 我套了哪个公式、该用哪个。数据存在本机浏览器，重要内容用「导出」备份。</div>
+<div class="cu-form">
+<input id="f-date" type="date">
+<select id="f-step"><option value="增长率">增长率</option><option value="增长量">增长量</option><option value="比重">比重</option><option value="倍数/平均数">倍数/平均数</option><option value="速算">速算</option><option value="术语">术语</option><option value="问句看反">问句看反</option></select>
+<input id="f-src" type="text" placeholder="题目（如 粉笔·资料 第3题）">
+<input id="f-why" type="text" placeholder="错因（如 基期比重套成了两期比重差）">
+<input id="f-act" type="text" placeholder="该用哪个公式">
+</div>
+<div class="cu-actions"><button class="btn" id="addBtn">添加</button><button class="btn ghost" id="expBtn">导出 JSON</button><button class="btn ghost" id="impBtn">导入 JSON</button><input id="impFile" type="file" accept=".json" style="display:none"></div>
+<div id="myTable"></div>
+</div>
+</section>
+</main>
+<footer>
+<p>用法：做资料前先扫「总览」的速查卡；做完错题记进「我的错题」，重点记公式套错和问句看反。</p>
+<p>与另外两个知识页同源：图推五步骤、关联词与逻辑关系词表。</p>
+</footer>
+<div id="toast"></div>
+<script>
+const LSKEY="gkzl.v1.mine";
+const DAY_CUTOFF_HOUR=6;
+function pad(n){return String(n).padStart(2,"0");}
+function logicalToday(){var t=new Date();t.setHours(t.getHours()-DAY_CUTOFF_HOUR);return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());}
+function load(){try{var v=localStorage.getItem(LSKEY);return v?JSON.parse(v):[];}catch(e){return [];}}
+function save(v){try{localStorage.setItem(LSKEY,JSON.stringify(v));}catch(e){}}
+let MY=load(); let curTab="总";
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>");}
+function renderMy(){
+  var el=document.getElementById("myTable");
+  document.getElementById("myCnt")&&(document.getElementById("myCnt").textContent=MY.length);
+  if(!MY.length){el.innerHTML="<div class=\"empty\">还没有记录。错一道就记一条：问的是什么、我套了哪个公式。</div>";return;}
+  var q=(document.getElementById("q").value||"").trim().toLowerCase();
+  var rows=MY.map(function(r,i){return {r:r,i:i};});
+  if(q)rows=rows.filter(function(o){return ([o.r.date,o.r.step,o.r.src,o.r.why,o.r.act].join(" ")).toLowerCase().indexOf(q)>=0;});
+  var h="<table><thead><tr><th style=\"width:92px\">日期</th><th style=\"width:110px\">哪类</th><th>题目</th><th>错因</th><th>该用的公式</th><th style=\"width:56px\">操作</th></tr></thead><tbody>";
+  h+=rows.map(function(o){return "<tr><td>"+esc(o.r.date)+"</td><td>"+inline(o.r.step)+"</td><td>"+inline(o.r.src)+"</td><td>"+inline(o.r.why)+"</td><td>"+inline(o.r.act)+"</td><td><button class=\"del\" data-i=\""+o.i+"\">删除</button></td></tr>";}).join("");
+  h+="</tbody></table>"; el.innerHTML=h;
+  el.querySelectorAll(".del").forEach(function(b){b.onclick=function(){var i=parseInt(b.dataset.i);if(!confirm("删除这条记录？"))return;MY.splice(i,1);save(MY);renderMy();toast("已删除");};});
+}
+function filterTab(tab){
+  var q=(document.getElementById("q").value||"").trim().toLowerCase();
+  var blocks=document.querySelectorAll("#tab-"+tab+" .block");
+  var shown=0;
+  blocks.forEach(function(b){
+    var t=(b.textContent||"").toLowerCase();
+    var ok=!q||t.indexOf(q)>=0;
+    b.style.display=ok?"":"none";
+    if(ok)shown++;
+  });
+  return shown;
+}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(window.__tt);window.__tt=setTimeout(function(){t.classList.remove("on");},1600);}
+function switchTab(tab){curTab=tab;
+  document.querySelectorAll("nav button.tb").forEach(function(b){b.classList.toggle("active",b.dataset.tab===tab);});
+  document.querySelectorAll("main section").forEach(function(s){s.classList.toggle("active",s.id==="tab-"+tab);});
+  if(tab==="我")renderMy(); else filterTab(tab);
+}
+document.querySelectorAll("nav button.tb").forEach(function(b){b.onclick=function(){switchTab(b.dataset.tab);};});
+document.getElementById("q").oninput=function(){ if(curTab==="我")renderMy(); else filterTab(curTab); };
+document.getElementById("quickAdd").onclick=function(){switchTab("我");var w=document.getElementById("f-why");w.focus();w.scrollIntoView({behavior:"smooth",block:"center"});};
+document.getElementById("addBtn").onclick=function(){
+  var why=document.getElementById("f-why").value.trim();
+  if(!why){toast("「错因」不能为空");document.getElementById("f-why").focus();return;}
+  MY.push({date:document.getElementById("f-date").value||logicalToday(),step:document.getElementById("f-step").value,src:document.getElementById("f-src").value.trim(),why:why,act:document.getElementById("f-act").value.trim()});
+  save(MY);["f-src","f-why","f-act"].forEach(function(id){document.getElementById(id).value="";});renderMy();toast("已添加");
+};
+document.getElementById("expBtn").onclick=function(){var blob=new Blob([JSON.stringify(MY,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="资料错题_"+logicalToday()+".json";a.click();URL.revokeObjectURL(a.href);toast("已导出");};
+document.getElementById("impBtn").onclick=function(){document.getElementById("impFile").click();};
+document.getElementById("impFile").onchange=function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var arr=JSON.parse(rd.result);if(!Array.isArray(arr))throw new Error("格式不对");MY=MY.concat(arr);save(MY);renderMy();toast("导入 "+arr.length+" 条");}catch(err){toast("导入失败："+err.message);}};rd.readAsText(f);e.target.value="";};
+document.getElementById("f-date").value=logicalToday();
+document.getElementById("stat").textContent="内置 69 条要点 · 8 个页签 · 我的错题 "+MY.length+" 条";
+</script>
+</body>
+</html>
