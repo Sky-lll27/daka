@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>关联词与逻辑关系词表 · 2027国考</title>
+<style>
+  :root{--red:#c0392b;--red-dark:#96281b;--bg:#f5f3f0;--card:#fff;--ink:#2c2c2c;--muted:#8a8a8a;--line:#e8e4df;--ok:#2e8b57;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;}
+  header{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;padding:18px 24px 14px;}
+  header h1{font-size:21px;font-weight:700;}
+  header .sub{font-size:12px;opacity:.88;margin-top:5px;line-height:1.7;}
+  #stat{font-size:12px;margin-top:7px;opacity:.95;}
+  nav{display:flex;gap:4px;align-items:center;background:var(--card);border-bottom:1px solid var(--line);padding:0 16px;position:sticky;top:0;z-index:10;flex-wrap:wrap;}
+  nav button.tb{border:none;background:none;padding:13px 18px;font-size:15px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;}
+  nav button.tb.active{color:var(--red);border-bottom-color:var(--red);font-weight:700;}
+  nav .spacer{flex:1;}
+  #q{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;width:190px;font-family:inherit;}
+  #q:focus{outline:none;border-color:var(--red);}
+  #quickAdd{border:none;background:var(--red);color:#fff;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;margin-left:8px;}
+  #quickAdd:hover{background:var(--red-dark);}
+  main{max-width:1080px;margin:0 auto;padding:18px 16px 70px;}
+  section{display:none;} section.active{display:block;}
+  .block{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+  .block h2{font-size:16px;color:var(--red);margin-bottom:10px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;line-height:1.65;}
+  th{background:#faf7f4;font-weight:700;color:#5a4a44;}
+  tbody tr:nth-child(even){background:#fcfbfa;}
+  td b,li b,h2 b{color:var(--red-dark);}
+  ul{margin:2px 0 2px 20px;} li{margin:5px 0;line-height:1.7;}
+  pre{background:#2c2c2c;color:#ffe9a8;border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.95;overflow-x:auto;font-family:"Cascadia Mono",Consolas,"Microsoft YaHei",monospace;white-space:pre;}
+  .note{margin-top:10px;background:#fff8e6;border:1px dashed #e6c86e;border-radius:8px;padding:10px 13px;font-size:13.5px;line-height:1.75;white-space:pre-wrap;}
+  .hint{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+  .cu-form{display:grid;grid-template-columns:110px 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+  .cu-form input{grid-column:span 1;}
+  .cu-form input.wide{grid-column:span 2;}
+  input[type=text],input[type=date]{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;width:100%;}
+  input[type=text]:focus,input[type=date]:focus{outline:none;border-color:var(--red);}
+  .cu-actions{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+  .btn{border:1px solid var(--red);background:var(--red);color:#fff;border-radius:8px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:inherit;}
+  .btn:hover{background:var(--red-dark);}
+  .btn.ghost{background:#fff;color:var(--muted);border-color:var(--line);}
+  .btn.ghost:hover{color:var(--red);border-color:var(--red);}
+  .del{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:6px;padding:3px 9px;cursor:pointer;font-size:12px;}
+  .del:hover{color:var(--red);border-color:var(--red);}
+  .empty{color:var(--muted);font-size:14px;padding:18px 4px;}
+  footer{max-width:1080px;margin:0 auto;padding:0 16px 40px;font-size:12px;color:var(--muted);line-height:1.9;}
+  footer code{background:#eee9e4;border-radius:4px;padding:1px 5px;font-size:11.5px;}
+  #toast{position:fixed;right:20px;bottom:20px;background:#2e8b57;color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;}
+  #toast.on{opacity:1;}
+</style>
+</head>
+<body>
+<header>
+  <h1>关联词与逻辑关系词表</h1>
+  <div class="sub">判断推理（翻译推理 / 论证）· 言语理解（片段阅读 / 逻辑填空）｜ 2027 国考行政执法类</div>
+  <div class="sub">来源：刘文超《判断推理系统课配套讲义》P135–142、P152 起 ｜ 霍克《言语理解系统课讲义》P2–7、P49 起 ｜ 阿里木江《言语理解与表达系统课》P21–22、P56–58 ｜〔通行口径〕为公考通用补充</div>
+  <div id="stat">—</div>
+</header>
+<nav>
+  <button class="tb active" data-tab="判">判断推理</button>
+  <button class="tb" data-tab="语">言语理解</button>
+  <button class="tb" data-tab="卡">考场速查</button>
+  <button class="tb" data-tab="我">我的清单 <span id="myCnt">0</span></button>
+  <span class="spacer"></span>
+  <input id="q" type="text" placeholder="搜索关键词，如 除非 / 转折 / 对策">
+  <button id="quickAdd">＋ 加一条</button>
+</nav>
+<main>
+  <section id="tab-判" class="active"></section>
+  <section id="tab-语"></section>
+  <section id="tab-卡"></section>
+  <section id="tab-我">
+    <div class="block">
+      <h2>我的清单 · 错题里没认出的词补这里</h2>
+      <div class="hint">点「＋ 加一条」或直接在下面填。数据存在本机浏览器（localStorage），换浏览器或清缓存会丢，重要内容请用「导出」备份。</div>
+      <div class="cu-form">
+        <input id="f-date" type="date">
+        <input id="f-word" type="text" placeholder="词 / 句式（如 除非…否则…）">
+        <input id="f-sent" type="text" class="wide" placeholder="原句摘录">
+        <input id="f-tr" type="text" placeholder="翻译或关系（如 ¬B→A）">
+        <input id="f-note" type="text" placeholder="备注">
+      </div>
+      <div class="cu-actions">
+        <button class="btn" id="addBtn">添加</button>
+        <button class="btn ghost" id="expBtn">导出 JSON</button>
+        <button class="btn ghost" id="impBtn">导入 JSON</button>
+        <input id="impFile" type="file" accept=".json" style="display:none">
+      </div>
+      <div id="myTable"></div>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>用法：做题前 3 分钟扫一遍「考场速查」；遇到错题里没认出的关联词，当场补到「我的清单」，周末只翻清单不重抄。</p>
+  <p>文件位置：<code>F:\DSH-WORK\20_国考备考\复习卡片\关联词与逻辑关系词表.html</code>　｜　建表 2026-10-27</p>
+</footer>
+<div id="toast"></div>
+<script>
+const BLOCKS=[{"t":"判","h":"一、翻译推理：题型识别","kind":"list","items":["两个特征同时出现就要走翻译：①题干和选项里出现**明显的逻辑关联词**；②提问方式是「可以推出」「不能推出」。","两步走：**先翻译**（关联词所在句子 → 箭头式）**再推理**（逆否等价等）。**不许读完凭语感挑。**"]},{"t":"判","h":"二、前推后（A → B）：看到这些，前面推后面","kind":"table","cols":["关联词","例句（讲义原例）","翻译"],"rows":[["如果……那么……","如果你能考上公务员，那么我给你买雪糕","考上 → 买雪糕"],["若……则……","若天下雨，则地会湿","下雨 → 地湿"],["只要……就……","只要不起雾，飞机就能起飞","不起雾 → 可起飞"],["为了……一定（必须）……","为了成功上岸，一定要乖乖听课","上岸 → 听课"],["所有……都……","所有花都是植物","花 → 植物"],["凡是……都……","凡是党中央的正确决定，我们都坚决拥护","党中央决定 → 拥护"],["……是……的充分条件","A 是 B 的充分条件","A → B"],["一旦……就……〔通行口径〕","一旦开考，手机就会收走","开考 → 收手机"]]},{"t":"判","h":"三、后推前（B → A）：看到这些，后面推前面","kind":"table","cols":["关联词","例句（讲义原例）","翻译"],"rows":[["只有……才……","只有通过笔试，才能考上公务员","考上公务员 → 通过笔试"],["不……不……","不努力不能成功","成功 → 努力"],["除非……否则不……","除非你道歉，否则我不原谅你","原谅 → 道歉"],["……是……的基础 / 假设 / 前提 / 关键","努力是成功的前提","成功 → 努力"],["……是……的必要 / 必不可少的条件","大量资本支持是必不可少的条件","向前进 → 资本支持"]],"note":"口诀：谁必不可少，谁就放在箭头后面（「必要条件」永远是后件）。"},{"t":"判","h":"四、除非……否则…… 的两种形式（最容易错，单独记）","kind":"table","cols":["句式","翻译","判别方法","例句"],"rows":[["除非 A，否则**不** B","**B → A**","有「不」字 = 后推前","除非你道歉，否则我不原谅你 → 原谅 → 道歉"],["除非 A，否则 B","**¬B → A**","没有「不」= 否后推前","除非你今天付款，否则我们法庭见 → ¬付款 → 上法庭"]],"note":"讲义原句：「除非 A 否则不 B：B→A；除非 A 否则 B：¬B→A」。考过的原题（2014 山西·老王与老李）就是这两句互换；还有（2014 河北政法干警）「只要不起雾，飞机就能起飞」选出「除非起雾，否则飞机按时起飞」。"},{"t":"判","h":"五、逆否等价与三条推理规则","kind":"code","text":"A → B  ≡  ¬B → ¬A"},{"t":"判","h":"五之续：三条规则","kind":"table","cols":["规则","说法","记法"],"rows":[["肯前必肯后","A 真 ⟹ B 真","肯定箭头前，必肯定箭头后"],["否后必否前","B 假 ⟹ A 假","否定箭头后，必否定箭头前"],["否前、肯后","无必然结论（可能 / 可能不）","这两头动了没用"]],"note":"反面提醒：讲义原例「如果你报了班，就免费送你书」→ 不报班的人有没有书？推不出来。这就是「否前无必然结论」。"},{"t":"判","h":"六、且 / 或 / 要么（三种连接）","kind":"table","cols":["逻辑式","含义","同义关联词（讲义原文）","例句"],"rows":[["A 且 B","二者同时成立","和、既……又……、不仅……而且……、……但是……","我长得帅并且有才华"],["A 或 B","至少一个成立","或者……或者……、……和……至少一个","我参加国考或者参加省考"],["要么 A 要么 B","只有一个成立（不相容）","……和……只有一个","要么张三是冠军，要么李四是冠军"]],"note":"「或」的翻译：否 1 → 1。或关系为真时，否定一项就能得到另一项为真。讲义原例：甲说「今年我参加了国考或省考」，已知国考报不了 → 甲一定参加了省考。"},{"t":"判","h":"七、德摩根定律（否定「且」「或」）","kind":"code","text":"¬(A 且 B) = ¬A 或 ¬B\n¬(A 或 B) = ¬A 且 ¬B"},{"t":"判","h":"七之续：口诀与原例","kind":"note","text":"口诀：非号放进去，「且」变「或」，「或」变「且」。\n讲义原例（2017 广州）：只要「信用风险上升」和「信贷需求不足」，银行就陷入资产荒；现在银行没陷入 → 结论是「风险没上升 或者 需求没不足」，不是「并且」。"},{"t":"判","h":"八、递推与等价互换（考场提速用）","kind":"list","items":["**递推**：A→B，B→C ⟹ A→C（讲义例：乱扔垃圾→没道德→没朋友→寸步难行）。","**同一句的五种说法**（互相等价，选项换说法要认得）：只有 A 才 B ＝ 如果 B 那么 A ＝ 除非 A 否则不 B ＝ 不 A 则不 B ＝ B 是 A 的必要条件。","**充分 vs 必要一句话**：A 是 B 的充分条件 ＝ A→B；A 是 B 的必要条件 ＝ B→A。**方向正好相反。**"]},{"t":"判","h":"九、易混对照（考前必扫）","kind":"table","cols":["易混对","区别"],"rows":[["只要 A 就 B（A→B） / 只有 A 才 B（B→A）","一个前推后，一个后推前，方向相反"],["除非 A 否则 B（¬B→A） / 除非 A 否则不 B（B→A）","「不」字决定推法"],["不 A 不 B（B→A） / 如果 A 就 B（A→B）","「不…不…」是后推前"],["是…的充分条件（前推后） / 是…的必要条件（后推前）","充分必要方向相反"],["或者 A 或者 B（至少一真） / 要么 A 要么 B（只有一真）","相容 vs 不相容"],["「……但是……」译为「且」","转折词在翻译推理里当「且」用"]]},{"t":"判","h":"十、逻辑论证：找论点 + 加强削弱","kind":"list","items":["**三件套**：论点＝观点态度结论；论据＝理由原因例子；论证＝二者之间的桥。","**① 找论点的关联词（讲义原文）**：因此、所以、认为、由此推出、据此可知。辅助三招：首尾句原则；结合提问方式（问啥找啥）；题干无关键词时看总结概括句。"]},{"t":"判","h":"十续①：加强（赞同）三类，按力度排","kind":"table","cols":["手法","什么时候用","选项特征"],"rows":[["搭桥（力度最强）","论点与论据**话题不一致**；问「前提/假设/必要条件」时优先","同时含两边关键词，并**肯定**二者联系"],["必要条件","问前提假设且**无**搭桥项","论点成立「没它不行」"],["解释原因 / 举例支持","常规加强","说明为什么成立 / 给个实例"]]},{"t":"判","h":"十续②：削弱（反对）三类，按力度排","kind":"table","cols":["手法","什么时候用","选项特征"],"rows":[["否定论点（最强、最常考）","常规削弱","与论点意思**相反**"],["拆桥","论点论据话题不一致 + 问「削弱**论证**」","同时含两边关键词，**否定**二者联系"],["否定论据","题干有支持方/反对方对立观点；或结论是**预测 / 建议**（建议、应该）","与论据意思**相反**"]]},{"t":"判","h":"十续③：论证题里的隐形陷阱词〔通行口径〕","kind":"list","items":["因果倒置：题干说 A 导致 B，选项说 B 导致 A。","相关≠因果：「正相关」「伴随」「相关」不等于「导致」。","绝对化：「一定」「必然」「所有」「只要…就」。"]},{"t":"判","h":"十一、类比推理常见关系〔通行口径，本套讲义未展开〕","kind":"list","items":["**语义**：近义、反义、同义、比喻象征。","**逻辑**：种属（A 是 B 的一种）、组成（A 是 B 的一部分）、全同、交叉、并列（矛盾/反对）。","**功能**：A 的功能是 B。**因果**：A 导致 B。**条件**：有 A 才有 B。**目的、顺承**。","**语法**：主谓、动宾、偏正、并列。**造句法**：把两个词连成一句话，看词性与位置是否一致。"]},{"t":"语","h":"一、片段阅读：五大关系 + 一条对策（微观-关联词语）","kind":"note","text":"这一节直接对应「句子题」的错点：认不出标志词 → 抓不到重点句 → 靠语感想 → 想偏差。"},{"t":"语","h":"一续：六类关系标志词（讲义原文）","kind":"table","cols":["关系","标志词","解题要点"],"rows":[["**递进**","更、尤其、正是、特别是、真正、根本、最（核心/突出）、而且（注意与「并且」区分）","起到强调作用，**程度词所在语句是重点**"],["**转折**","典型：但是、可是、然而、不过、却、其实、事实上、实际上；非典型：殊不知、截然相反、截然不同、相对而言、一种误读、一个全新的研究","**转折之后是重点**；干扰选项在转折之前"],["**因果**","因为……所以……、由于……因此……；引导结论：所以、因此、由此、因而、故而、正因如此","**结论是重点**；尾句出现结论词多数是中心句"],["**条件**","只有……才……（必要条件）、如果……那么……、只要……就……","**必要条件是重点**，即「只有」和「才」之间的部分"],["**并列**","此外、另外、同时、以及、分号「；」、相同或相近句式、无其他关联标志词","**全面概括**；正确项含「和/及/与/同」或多方面词（许多、一些、不同、多种、一系列）；干扰项＝表述片面"],["**对策**","①应该、应当、必须、需要、亟须、亟待＋做法 ②通过/采取……手段/途径/措施/方式/方法/渠道，才能…… ③呼吁、倡导、提倡、提醒、建议＋做法 ④前提、基础、保障、关键","**对策是重点**（公考极高频）"]]},{"t":"语","h":"二、因果句的三种后续（讲义原文）","kind":"list","items":["若「因此」句在开头/中间，后面是解释说明 → 「因此」句就是重点。","后有因果 → 结合行文脉络把握最终结论。","后有转折 → 转折后是重点；后有并列 → 需全面概括。"]},{"t":"语","h":"三、五种行文脉络（讲义原文）","kind":"list","items":["总-分、总-分-总、分-总、分-总-分、分-分。","中心句特征：观点（对策、结论、评价）。","分述句特征：①举例子（「比如」「例如」「……就是例证」）②调查报告、数据资料 ③正反论证 ④原因解释 ⑤并列分述。"]},{"t":"语","h":"四、其他辅助标志","kind":"list","items":["**主题词**：正确选项必须含主题词（文段围绕它展开、高频、多为名词、前有引入后有解释说明）。","**尾句关注**：结论、对策、代词（这/此）引导的尾句、常考标志词「对此、有鉴于此、在这个意义上、从这个角度来说」。","**反面论证给对策**：如果/倘若/一旦……，则（消极影响）。","**接语推断**：重点看文段最后一句话。**词句理解**：词句在首尾 → 整体把握；在中间 → 联系前后文。"]},{"t":"语","h":"五、逻辑填空：先判关系，再选词（讲义原文「找关联」）","kind":"table","cols":["关系","标志词","理论要点"],"rows":[["**递进**","而且、更、甚至、乃至、遑论；不仅……而且……","语义倾向一致，**程度前轻后重**"],["**转折**","但是、可是、然而、却、其实、实际上","**语义相反**（或话题转移、倾向性相反）"],["**并列**","正义并列：和、及、与、同、顿号（、）、逗号（，）、分号（；）、相同句式；反义并列：不是……而是……、或","按标志判断语义**相近**还是**相反**"],["**解释对应**","即、也就是说、换言之、无异于、比如、例如；冒号（：）、破折号（——）；**无标志**时靠前后分句内容","所填词与解释说明的语句形成**语义对应**"],["**因果**","因为……所以……、之所以……是因为……、使得","因果之间存在对应"],["**条件**","如果……那么……、只要……就会……、只有……才……","条件与结果之间存在对应"]]},{"t":"语","h":"六、除关系外还要过三关（讲义原题分类）","kind":"table","cols":["关","内容","要点"],"rows":[["看词色","感情色彩：褒义 / 贬义 / 中性","与文段感情色彩一致"],["看词度","表达程度轻重","与文段意思的轻重一致"],["看词义侧重 / 搭配","词义侧重点、固定搭配","与语境所指一致"]]},{"t":"语","h":"七、干扰项与陷阱标志（认出来就能直接排除）","kind":"table","cols":["陷阱","标志词","处理"],"rows":[["无关对比","A 比 B 更……、A 高于/优于 B、利大于弊","「无关对比」＝无关项，直接排"],["绝对化（日常结论题）","一定、必须、肯定、只要…就、只有…才","「慎选」档"],["程度过重","最、极大、很、越来越","「慎选」档"],["范围扩大","全部、所有、任何、一切","「慎选」档"],["无中生有 / 偷换概念 / 逻辑错误","—","「不选」档"],["优选词","可能、有的、有些、也许","「优选」档"]]},{"t":"卡","h":"判断推理 · 翻译推理（背这一页）","kind":"code","text":"前推后：如果…那么… / 若…则… / 只要…就… / 为了…一定… / 所有…都… / 凡是…都… / 是…的充分条件\n后推前：只有…才… / 不…不… / 除非…否则不… / 是…的基础·假设·前提·关键 / 是…的必要·必不可少的条件\n除非A否则B  = ¬B→A\n除非A否则不B = B→A\n逆否：A→B ≡ ¬B→¬A ；肯前必肯后、否后必否前、否前肯后无结论\n且：和 / 既…又… / 不仅…而且… / …但是…      或：或者…或者… / …和…至少一个（否1→1）\n要么…要么…：只有一个    德摩根：¬(A且B)=¬A或¬B ； ¬(A或B)=¬A且¬B"},{"t":"卡","h":"言语 · 关系速记","kind":"code","text":"递进 → 程度词处是重点（更/尤其/甚至/乃至/根本/最/而且）\n转折 → 转折之后是重点（但是/可是/然而/不过/却/其实/事实上/实际上/殊不知）\n因果 → 结论是重点（所以/因此/由此/因而/故而/正因如此）\n条件 → 必要条件是重点（只有…才…之间那一截）\n并列 → 全面概括（此外/另外/同时/以及/；/相同句式）\n对策 → 对策是重点（应该/应当/必须/需要/亟须/亟待；通过…才能；呼吁/倡导/建议；前提/基础/保障/关键）"},{"t":"卡","h":"本表未覆盖的部分（下一步可补）","kind":"table","cols":["内容","现状","建议"],"rows":[["逻辑填空高频实词/成语辨析","未收录","霍克讲义第三章后续 + 粉笔错题，可另出一份《成语实词辨析表》"],["图推五类规律（位置/样式/属性/数量/特殊）","未收录","已在打卡页 an 和 P1 总结里，若要单独成表可再做"],["定义判断解题结构","未收录","关键词抓取：主体 / 客体 / 条件 / 方式 / 结果"],["类比推理常考关系细化","仅列纲目","讲义未展开，需另找资料"]]}];
+const LSKEY="gkct.v1.custom";
+const DAY_CUTOFF_HOUR=6;
+function pad(n){return String(n).padStart(2,"0");}
+function logicalToday(){var t=new Date();t.setHours(t.getHours()-DAY_CUTOFF_HOUR);return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());}
+function load(){try{var v=localStorage.getItem(LSKEY);return v?JSON.parse(v):[];}catch(e){return [];}}
+function save(v){try{localStorage.setItem(LSKEY,JSON.stringify(v));}catch(e){}}
+let MY=load();
+let curTab="判";
+
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>");}
+
+function blockHTML(b){
+  var body="";
+  if(b.kind==="table"){
+    body="<table><thead><tr>"+b.cols.map(function(c){return "<th>"+inline(c)+"</th>";}).join("")+"</tr></thead><tbody>";
+    body+=b.rows.map(function(r){return "<tr>"+r.map(function(c){return "<td>"+inline(c)+"</td>";}).join("")+"</tr>";}).join("");
+    body+="</tbody></table>";
+    if(b.note) body+="<div class=\"note\">"+inline(b.note)+"</div>";
+  } else if(b.kind==="list"){
+    body="<ul>"+b.items.map(function(i){return "<li>"+inline(i)+"</li>";}).join("")+"</ul>";
+  } else if(b.kind==="code"){
+    body="<pre>"+esc(b.text)+"</pre>";
+  } else if(b.kind==="note"){
+    body="<div class=\"note\">"+inline(b.text)+"</div>";
+  }
+  return "<div class=\"block\" data-txt=\""+esc(plain(b)).replace(/"/g,"&quot;")+"\"><h2>"+inline(b.h)+"</h2>"+body+"</div>";
+}
+function plain(b){
+  var s=b.h||"";
+  if(b.items) s+=" "+b.items.join(" ");
+  if(b.text) s+=" "+b.text;
+  if(b.note) s+=" "+b.note;
+  if(b.cols) s+=" "+b.cols.join(" ");
+  if(b.rows) s+=" "+b.rows.map(function(r){return r.join(" ");}).join(" ");
+  return s.replace(/\*\*/g,"");
+}
+
+function renderTab(tab){
+  if(tab==="我"){renderMy();return;}
+  var el=document.getElementById("tab-"+tab);
+  var q=(document.getElementById("q").value||"").trim().toLowerCase();
+  var list=BLOCKS.filter(function(b){return b.t===tab;});
+  if(q) list=list.filter(function(b){return plain(b).toLowerCase().indexOf(q)>=0;});
+  el.innerHTML=list.length?list.map(blockHTML).join(""):"<div class=\"block\"><div class=\"empty\">没有匹配「"+esc(q)+"」的内容</div></div>";
+}
+
+function renderMy(){
+  var el=document.getElementById("myTable");
+  document.getElementById("myCnt").textContent=MY.length;
+  if(!MY.length){el.innerHTML="<div class=\"empty\">还没有自定义词条。遇到没认出的关联词，用上面的表单加一条。</div>";return;}
+  var q=(document.getElementById("q").value||"").trim().toLowerCase();
+  var rows=MY.map(function(r,i){return {r:r,i:i};});
+  if(q) rows=rows.filter(function(o){return ([o.r.date,o.r.word,o.r.sent,o.r.tr,o.r.note].join(" ")).toLowerCase().indexOf(q)>=0;});
+  var h="<table><thead><tr><th style=\"width:96px\">日期</th><th style=\"width:180px\">词 / 句式</th><th>原句摘录</th><th style=\"width:150px\">翻译 / 关系</th><th style=\"width:130px\">备注</th><th style=\"width:56px\">操作</th></tr></thead><tbody>";
+  h+=rows.map(function(o){return "<tr><td>"+esc(o.r.date)+"</td><td>"+inline(o.r.word)+"</td><td>"+inline(o.r.sent)+"</td><td>"+inline(o.r.tr)+"</td><td>"+inline(o.r.note)+"</td><td><button class=\"del\" data-i=\""+o.i+"\">删除</button></td></tr>";}).join("");
+  h+="</tbody></table>";
+  el.innerHTML=h;
+  el.querySelectorAll(".del").forEach(function(b){
+    b.onclick=function(){
+      var i=parseInt(b.dataset.i);
+      if(!confirm("删除「"+(MY[i].word||"这条")+"」？"))return;
+      MY.splice(i,1);save(MY);renderMy();stat();toast("已删除");
+    };
+  });
+}
+
+function stat(){
+  var total=BLOCKS.reduce(function(a,b){return a+(b.rows?b.rows.length:(b.items?b.items.length:1));},0);
+  document.getElementById("stat").textContent="内置 "+total+" 条要点 · 我的清单 "+MY.length+" 条 · 4 个页签";
+  document.getElementById("myCnt").textContent=MY.length;
+}
+function toast(msg){
+  var t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("on");
+  clearTimeout(window.__tt);
+  window.__tt=setTimeout(function(){t.classList.remove("on");},1600);
+}
+
+function switchTab(tab){
+  curTab=tab;
+  document.querySelectorAll("nav button.tb").forEach(function(b){b.classList.toggle("active",b.dataset.tab===tab);});
+  document.querySelectorAll("main section").forEach(function(s){s.classList.toggle("active",s.id==="tab-"+tab);});
+  renderTab(tab);
+}
+document.querySelectorAll("nav button.tb").forEach(function(b){
+  b.onclick=function(){switchTab(b.dataset.tab);};
+});
+document.getElementById("q").oninput=function(){renderTab(curTab);};
+document.getElementById("quickAdd").onclick=function(){
+  switchTab("我");
+  var w=document.getElementById("f-word");w.focus();w.scrollIntoView({behavior:"smooth",block:"center"});
+};
+document.getElementById("addBtn").onclick=function(){
+  var w=document.getElementById("f-word").value.trim();
+  if(!w){toast("「词 / 句式」不能为空");document.getElementById("f-word").focus();return;}
+  MY.push({
+    date:document.getElementById("f-date").value||logicalToday(),
+    word:w,
+    sent:document.getElementById("f-sent").value.trim(),
+    tr:document.getElementById("f-tr").value.trim(),
+    note:document.getElementById("f-note").value.trim()
+  });
+  save(MY);
+  ["f-word","f-sent","f-tr","f-note"].forEach(function(id){document.getElementById(id).value="";});
+  renderMy();stat();toast("已添加");
+};
+document.getElementById("expBtn").onclick=function(){
+  var blob=new Blob([JSON.stringify(MY,null,2)],{type:"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="关联词清单_"+logicalToday()+".json";
+  a.click();URL.revokeObjectURL(a.href);
+  toast("已导出");
+};
+document.getElementById("impBtn").onclick=function(){document.getElementById("impFile").click();};
+document.getElementById("impFile").onchange=function(e){
+  var f=e.target.files[0];if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var arr=JSON.parse(rd.result);
+      if(!Array.isArray(arr))throw new Error("格式不对");
+      MY=MY.concat(arr);save(MY);renderMy();stat();toast("导入 "+arr.length+" 条");
+    }catch(err){toast("导入失败："+err.message);}
+  };
+  rd.readAsText(f);
+  e.target.value="";
+};
+
+document.getElementById("f-date").value=logicalToday();
+stat();
+renderTab("判");
+</script>
+</body>
+</html>

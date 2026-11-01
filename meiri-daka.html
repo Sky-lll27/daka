@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日打卡</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 30px 16px;
+  }
+  .container { max-width: 600px; margin: 0 auto; }
+  h1 { color: #fff; text-align: center; font-size: 28px; margin-bottom: 6px; }
+  .date { text-align: center; color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 24px; }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+
+  /* 添加任务 */
+  .add-row { display: flex; gap: 8px; }
+  .add-row input {
+    flex: 1;
+    padding: 11px 14px;
+    border: 2px solid #e2e2ee;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .add-row input:focus { border-color: #667eea; }
+  .add-row button {
+    padding: 11px 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .add-row button:hover { opacity: 0.9; }
+  .tip { font-size: 12px; color: #999; margin-top: 8px; }
+
+  /* 任务列表 */
+  .task-list { list-style: none; }
+  .task-item {
+    display: flex;
+    align-items: center;
+    padding: 13px 4px;
+    border-bottom: 1px solid #f0f0f5;
+    gap: 12px;
+  }
+  .task-item:last-child { border-bottom: none; }
+
+  .checkbox {
+    width: 24px; height: 24px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .checkbox:hover { border-color: #667eea; }
+  .checkbox.done {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+    color: #fff;
+    font-size: 14px;
+  }
+  .task-name { flex: 1; font-size: 15px; color: #333; }
+  .task-name.done { text-decoration: line-through; color: #bbb; }
+
+  .streak {
+    font-size: 12px;
+    color: #ff9800;
+    background: #fff3e0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 5px;
+    transition: color 0.2s;
+  }
+  .icon-btn.edit:hover { color: #667eea; }
+  .icon-btn.del:hover { color: #ff4444; }
+
+  /* 行内编辑 */
+  .edit-row { display: flex; gap: 8px; flex: 1; }
+  .edit-row input {
+    flex: 1;
+    padding: 7px 10px;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    min-width: 0;
+  }
+  .edit-row button {
+    padding: 7px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .edit-row .ok { background: #667eea; color: #fff; }
+  .edit-row .cancel { background: #f0f0f5; color: #888; }
+
+  /* 导入导出 */
+  .data-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .data-row button {
+    padding: 7px 14px;
+    border: 1.5px solid #e2e2ee;
+    background: #fff;
+    color: #666;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .data-row button:hover { border-color: #667eea; color: #667eea; }
+  .data-row button.danger:hover { border-color: #ff4444; color: #ff4444; }
+  #fileInput { display: none; }
+
+  .empty { text-align: center; color: #bbb; padding: 30px 0; font-size: 14px; }
+
+  /* 统计 */
+  .stats { display: flex; gap: 10px; }
+  .stat-box {
+    flex: 1;
+    text-align: center;
+    background: #f7f7fc;
+    border-radius: 12px;
+    padding: 14px 6px;
+  }
+  .stat-num { font-size: 26px; font-weight: 700; color: #667eea; }
+  .stat-label { font-size: 12px; color: #999; margin-top: 3px; }
+
+  /* 连续打卡日历（近7天） */
+  .week { display: flex; gap: 6px; margin-top: 4px; }
+  .day {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 10px;
+    background: #f0f0f5;
+    font-size: 12px;
+    color: #888;
+  }
+  .day .dot {
+    width: 10px; height: 10px;
+    background: #ddd;
+    border-radius: 50%;
+    margin: 6px auto 0;
+  }
+  .day.hit { background: #eef0ff; color: #667eea; }
+  .day.hit .dot { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .day.today { outline: 2px solid #667eea; }
+
+  /* 历史记录 */
+  .history-title { font-size: 14px; color: #666; margin-bottom: 10px; font-weight: 600; }
+  .hist-row { display: flex; align-items: center; font-size: 13px; padding: 6px 0; color: #777; gap: 8px; }
+  .hist-date { width: 85px; color: #999; flex-shrink: 0; }
+  .hist-bar-bg { flex: 1; height: 8px; background: #f0f0f5; border-radius: 4px; overflow: hidden; }
+  .hist-bar { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 4px; }
+  .hist-num { width: 50px; text-align: right; color: #667eea; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>✅ 每日打卡</h1>
+  <div class="date" id="date"></div>
+
+  <!-- 添加任务 -->
+  <div class="card">
+    <div class="add-row">
+      <input id="taskInput" type="text" placeholder="输入新任务，如：喝 8 杯水" maxlength="30">
+      <button onclick="addTask()">＋ 添加</button>
+    </div>
+    <div class="tip">任务保存在本机浏览器里，关掉网页也不会丢；点 ✎ 可改名</div>
+    <div class="data-row">
+      <button onclick="exportData()">⬇ 导出备份</button>
+      <button onclick="document.getElementById('fileInput').click()">⬆ 导入恢复</button>
+      <button class="danger" onclick="clearData()">🗑 清空全部数据</button>
+      <input type="file" id="fileInput" accept=".json">
+    </div>
+  </div>
+
+  <!-- 今日任务 -->
+  <div class="card">
+    <div class="task-list" id="taskList"></div>
+    <div class="empty" id="empty" style="display:none;">还没有任务，先添加一个吧 👆</div>
+  </div>
+
+  <!-- 统计 -->
+  <div class="card">
+    <div class="stats">
+      <div class="stat-box"><div class="stat-num" id="sTotal">0</div><div class="stat-label">累计打卡（次）</div></div>
+      <div class="stat-box"><div class="stat-num" id="sToday">0/0</div><div class="stat-label">今日完成</div></div>
+      <div class="stat-box"><div class="stat-num" id="sBest">0</div><div class="stat-label">最长连续（天）</div></div>
+    </div>
+    <div class="week" id="week"></div>
+  </div>
+
+  <!-- 历史 -->
+  <div class="card">
+    <div class="history-title">最近 7 天完成情况</div>
+    <div id="history"></div>
+  </div>
+</div>
+
+<script src="sync.js"></script>
+<script>
+/* ===== 数据结构 =====
+   tasks: [{id, name, created}]  自定义任务列表
+   checkins: { "2026-10-16": [taskId,...] }  每天勾了哪些
+   streaks: { taskId: 连续天数 }  用于显示
+*/
+const KEY = 'dailyCheckinData';
+let data = load();
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if (d && d.tasks) return d;
+  } catch(e) {}
+  return { tasks: [], checkins: {} };
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(data));
+  /* 本地存完顺带推云端 */
+  try { if (typeof CloudSync !== 'undefined') { CloudSync.push({ data: data }); } } catch(e) {}
+}
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + '-' +
+    String(d.getMonth()+1).padStart(2,'0') + '-' +
+    String(d.getDate()).padStart(2,'0');
+}
+function dateStr(offset) { // offset 天前
+  const d = new Date();
+  d.setDate(d.getDate() - offset);
+  return d.getFullYear() + '-' +
+    String(d.getMonth()+1).padStart(2,'0') + '-' +
+    String(d.getDate()).padStart(2,'0');
+}
+
+/* ===== 添加 / 删除任务 ===== */
+function addTask() {
+  const inp = document.getElementById('taskInput');
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); return; }
+  if (data.tasks.some(t => t.name === name)) { alert('这个任务已经有了'); return; }
+  data.tasks.push({ id: Date.now(), name: name });
+  inp.value = '';
+  save(); render();
+}
+document.getElementById('taskInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addTask();
+});
+
+function deleteTask(id) {
+  if (!confirm('删除这个任务？历史打卡记录也会一起删掉')) return;
+  data.tasks = data.tasks.filter(t => t.id !== id);
+  Object.keys(data.checkins).forEach(day => {
+    data.checkins[day] = data.checkins[day].filter(x => x !== id);
+    if (!data.checkins[day].length) delete data.checkins[day];
+  });
+  save(); render();
+}
+
+/* ===== 编辑任务名（行内编辑） ===== */
+let editingId = null;   // 正在编辑的任务 id
+function startEdit(id) {
+  editingId = id;
+  render();
+  const inp = document.querySelector('.edit-row input');
+  if (inp) {
+    inp.focus();
+    inp.setSelectionRange(inp.value.length, inp.value.length);
+  }
+}
+function cancelEdit() { editingId = null; render(); }
+function saveEdit(id) {
+  const inp = document.querySelector('.edit-row input');
+  if (!inp) return;
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); return; }
+  if (data.tasks.some(t => t.name === name && t.id !== id)) { alert('已有同名任务'); return; }
+  const t = data.tasks.find(t => t.id === id);
+  if (t) t.name = name;
+  editingId = null;
+  save(); render();
+}
+/* 编辑框里的回车/ESC */
+document.addEventListener('keydown', e => {
+  if (editingId === null) return;
+  if (e.key === 'Enter') saveEdit(editingId);
+  else if (e.key === 'Escape') cancelEdit();
+});
+
+/* ===== 今日打卡 ===== */
+function toggle(id) {
+  const day = today();
+  if (!data.checkins[day]) data.checkins[day] = [];
+  const idx = data.checkins[day].indexOf(id);
+  if (idx >= 0) data.checkins[day].splice(idx, 1);
+  else data.checkins[day].push(id);
+  if (!data.checkins[day].length) delete data.checkins[day];
+  save(); render();
+}
+
+/* 连续天数：从今天（或昨天没打就从今天断）往回数 */
+function calcStreak(taskId) {
+  let streak = 0;
+  for (let i = 0; i < 400; i++) {
+    const list = data.checkins[dateStr(i)] || [];
+    if (list.includes(taskId)) streak++;
+    else if (i === 0) continue; // 今天还没打，从昨天开始数
+    else break;
+  }
+  return streak;
+}
+
+/* 最长连续天数（任一任务当天有打卡即算当天有活动） */
+function bestStreak() {
+  let best = 0, cur = 0;
+  for (let i = 399; i >= 0; i--) {
+    if (data.checkins[dateStr(i)]) { cur++; if (cur > best) best = cur; }
+    else cur = 0;
+  }
+  return best;
+}
+
+/* ===== 渲染 ===== */
+function render() {
+  // 日期
+  const now = new Date();
+  const week = ['日','一','二','三','四','五','六'][now.getDay()];
+  document.getElementById('date').textContent =
+    now.getFullYear() + ' 年 ' + (now.getMonth()+1) + ' 月 ' + now.getDate() + ' 日 · 星期' + week;
+
+  // 任务列表
+  const list = document.getElementById('taskList');
+  const empty = document.getElementById('empty');
+  const doneToday = data.checkins[today()] || [];
+
+  if (!data.tasks.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    list.innerHTML = data.tasks.map(t => {
+      const done = doneToday.includes(t.id);
+      const streak = calcStreak(t.id);
+      const isEditing = editingId === t.id;
+      const mainHtml = isEditing
+        ? '<div class="edit-row">' +
+            '<input type="text" value="' + esc(t.name) + '" maxlength="30">' +
+            '<button class="ok" onclick="saveEdit(' + t.id + ')">保存</button>' +
+            '<button class="cancel" onclick="cancelEdit()">取消</button>' +
+          '</div>'
+        : '<span class="task-name ' + (done?'done':'') + '">' + esc(t.name) + '</span>' +
+          (streak >= 2 ? '<span class="streak">🔥 ' + streak + ' 天</span>' : '') +
+          '<button class="icon-btn edit" title="修改任务名" onclick="startEdit(' + t.id + ')">✎</button>' +
+          '<button class="icon-btn del" title="删除任务" onclick="deleteTask(' + t.id + ')">✕</button>';
+      return '<li class="task-item">' +
+        '<div class="checkbox ' + (done?'done':'') + '" onclick="toggle(' + t.id + ')">' +
+          (done?'✓':'') + '</div>' +
+        mainHtml +
+      '</li>';
+    }).join('');
+  }
+
+  // 统计
+  const total = Object.values(data.checkins).reduce((s, a) => s + a.length, 0);
+  document.getElementById('sTotal').textContent = total;
+  document.getElementById('sToday').textContent = doneToday.length + '/' + data.tasks.length;
+  document.getElementById('sBest').textContent = bestStreak();
+
+  // 近 7 天圆点
+  let weekHtml = '';
+  for (let i = 6; i >= 0; i--) {
+    const ds = dateStr(i);
+    const hit = !!data.checkins[ds];
+    const label = i === 0 ? '今天' : (i === 1 ? '昨天' : ds.slice(5).replace('-','/'));
+    weekHtml += '<div class="day ' + (hit?'hit':'') + ' ' + (i===0?'today':'') + '">' +
+      label + '<div class="dot"></div></div>';
+  }
+  document.getElementById('week').innerHTML = weekHtml;
+
+  // 最近 7 天条形
+  let histHtml = '';
+  const maxN = Math.max(1, ...[0,1,2,3,4,5,6].map(i => (data.checkins[dateStr(i)]||[]).length));
+  for (let i = 0; i <= 6; i++) {
+    const ds = dateStr(i);
+    const n = (data.checkins[ds]||[]).length;
+    const pct = Math.round(n / maxN * 100);
+    const label = i === 0 ? '今天' : i === 1 ? '昨天' : ds.slice(5).replace('-','/');
+    histHtml += '<div class="hist-row">' +
+      '<span class="hist-date">' + label + '</span>' +
+      '<div class="hist-bar-bg"><div class="hist-bar" style="width:' + pct + '%"></div></div>' +
+      '<span class="hist-num">' + n + ' 项</span></div>';
+  }
+  document.getElementById('history').innerHTML = histHtml;
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ===== 导出 / 导入 / 清空 ===== */
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '每日打卡备份_' + today() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+document.getElementById('fileInput').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function() {
+    try {
+      const d = JSON.parse(reader.result);
+      if (!d || !Array.isArray(d.tasks) || typeof d.checkins !== 'object') {
+        alert('文件格式不对，不是本页导出的备份'); return;
+      }
+      if (!confirm('导入会覆盖当前所有数据，确定吗？')) return;
+      data = d;
+      save(); render();
+      alert('导入成功');
+    } catch(e) { alert('读取文件失败：' + e.message); }
+  };
+  reader.readAsText(file);
+  this.value = '';
+});
+
+function clearData() {
+  if (!confirm('确定清空所有任务和打卡记录？此操作不可恢复！')) return;
+  if (!confirm('再次确认：真的要全部清空吗？')) return;
+  localStorage.removeItem(KEY);
+  localStorage.removeItem(KEY + '_init');
+  data = { tasks: [], checkins: {} };
+  save(); render();
+}
+
+// 启动时放几个示例任务（用户可删）
+if (!data.tasks.length && !localStorage.getItem(KEY + '_init')) {
+  data.tasks = [
+    { id: 1, name: '早起（11 点前起床）' },
+    { id: 2, name: '喝 8 杯水' },
+    { id: 3, name: '阅读 30 分钟' },
+  ];
+  localStorage.setItem(KEY + '_init', '1');
+  save();
+}
+
+render();
+
+/* ===== 云端同步 ===== */
+if (typeof CloudSync !== 'undefined') {
+  CloudSync.init({
+    key: 'meiri',
+    onRemote: function(d) {
+      if (!d || !d.data) return;
+      /* 直接写 localStorage，不走 save()，避免回环推送 */
+      data = d.data;
+      try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e) {}
+      render();
+    }
+  });
+}
+</script>
+</body>
+</html>

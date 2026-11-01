@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>国考打卡 · 2027国考（行政执法类）</title>
+<style>
+  :root{
+    --red:#c0392b; --red-dark:#96281b; --bg:#f5f3f0; --card:#ffffff;
+    --ink:#2c2c2c; --muted:#8a8a8a; --line:#e8e4df; --ok:#2e8b57; --warn:#e67e22;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif; background:var(--bg); color:var(--ink); min-height:100vh;}
+  header{background:linear-gradient(135deg,var(--red-dark),var(--red)); color:#fff; padding:18px 22px 14px;}
+  header h1{font-size:20px; font-weight:700;}
+  header .sub{font-size:12px; opacity:.85; margin-top:4px;}
+  #now{font-size:13px; margin-top:6px; font-variant-numeric:tabular-nums;}
+  .prog-wrap{margin-top:10px; background:rgba(255,255,255,.25); border-radius:8px; height:14px; overflow:hidden; position:relative;}
+  .prog-bar{height:100%; background:#ffd54d; width:0%; transition:width .3s;}
+  .prog-txt{font-size:12px; margin-top:4px; opacity:.9;}
+  nav{display:flex; gap:4px; background:var(--card); border-bottom:1px solid var(--line); padding:0 14px; position:sticky; top:0; z-index:10;}
+  nav button{border:none; background:none; padding:13px 18px; font-size:15px; cursor:pointer; color:var(--muted); border-bottom:3px solid transparent;}
+  nav button.active{color:var(--red); border-bottom-color:var(--red); font-weight:700;}
+  main{max-width:960px; margin:0 auto; padding:18px 14px 60px;}
+  section{display:none;} section.active{display:block;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:14px;}
+  /* ---- 今日任务 ---- */
+  .daynav{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;}
+  .daynav button{border:1px solid var(--line); background:var(--card); border-radius:8px; padding:6px 14px; cursor:pointer; font-size:14px;}
+  .daynav button:hover{border-color:var(--red); color:var(--red);}
+  .daynav input[type=date]{border:1px solid var(--line); border-radius:8px; padding:5px 8px; font-size:14px;}
+  .day-head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .day-head .date{font-size:22px; font-weight:800;}
+  .badge{font-size:12px; padding:2px 10px; border-radius:20px; background:#fdecea; color:var(--red); border:1px solid #f5c6c0;}
+  .badge.stage2{background:#fef5e7; color:#b9770e; border-color:#f8dcab;}
+  .badge.stage3{background:#eafaf1; color:#1e8449; border-color:#bfe8d2;}
+  .badge.stage4{background:#ebf5fb; color:#2471a3; border-color:#c3ddf1;}
+  .badge.stage5{background:#f4ecf7; color:#7d3c98; border-color:#e0cbe8;}
+  .badge.exam{background:#2c2c2c; color:#ffd54d; border-color:#2c2c2c;}
+  .focus{margin-top:8px; background:#fff8e6; border:1px dashed #e6c86e; border-radius:8px; padding:8px 12px; font-size:14px;}
+  .focus b{color:var(--warn);}
+  .grp{margin-top:14px;}
+  .grp h3{font-size:15px; color:var(--red); margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+  .grp h3 .cnt{font-size:12px; color:var(--muted); font-weight:400;}
+  .task{display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border:1px solid var(--line); border-radius:8px; margin-bottom:6px; cursor:pointer; background:#fff;}
+  .task:hover{border-color:#d9b3ac;}
+  .task input{margin-top:3px; width:17px; height:17px; accent-color:var(--red); cursor:pointer; flex-shrink:0;}
+  .task span{font-size:14px; line-height:1.55;}
+  .task.done span{text-decoration:line-through; color:var(--muted);}
+  .task.done{background:#f7f9f7;}
+  /* ---- 自定义任务 ---- */
+  .cu-row{display:flex; gap:6px; align-items:stretch;}
+  .cu-row .task{flex:1;}
+  .cu-del{border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:8px; padding:0 11px; cursor:pointer; font-size:14px; margin-bottom:6px; flex-shrink:0;}
+  .cu-del:hover{border-color:var(--red); color:var(--red);}
+  .cu-add{display:flex; gap:8px; margin-top:2px;}
+  .cu-add input{flex:1; border:1px solid var(--line); border-radius:8px; padding:8px 11px; font-size:13px; font-family:inherit;}
+  .cu-add input:focus{outline:none; border-color:var(--red);}
+  .cu-add button{border:none; background:var(--red); color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; cursor:pointer; flex-shrink:0;}
+  .cu-add button:hover{background:var(--red-dark);}
+  .daydone{margin-top:14px; text-align:center;}
+  .daydone .ring{font-size:15px; color:var(--muted); margin-bottom:8px;}
+  .daydone .ring b{color:var(--ok); font-size:18px;}
+  .note-area{width:100%; min-height:64px; border:1px solid var(--line); border-radius:8px; padding:10px; font-size:13px; font-family:inherit; resize:vertical; margin-top:6px;}
+  .note-label{font-size:13px; color:var(--muted); margin-top:12px;}
+  .coach-box{display:none; margin-top:12px; padding:12px 14px; border-radius:10px; background:#f4f8ff; border:1px solid #d6e4ff;}
+  .coach-box.on{display:block;}
+  .coach-head{font-size:13px; font-weight:700; color:#2b5fb3; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .coach-body{font-size:13px; line-height:1.75; color:#333; white-space:pre-wrap;}
+  .coach-btn{font-size:12px; padding:4px 10px; border-radius:6px; border:1px solid #2b5fb3; background:#fff; color:#2b5fb3; cursor:pointer; white-space:nowrap;}
+  .coach-btn:hover{background:#2b5fb3; color:#fff;}
+  .hint{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.6;}
+  /* ---- 倒计时 ---- */
+  .cd-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px;}
+  .cd-card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; position:relative;}
+  .cd-card.urgent{border-color:var(--red); box-shadow:0 0 0 1px var(--red);}
+  .cd-card.past{opacity:.55;}
+  .cd-title{font-size:15px; font-weight:700;}
+  .cd-target{font-size:12px; color:var(--muted); margin-top:2px;}
+  .cd-big{font-size:40px; font-weight:800; color:var(--red); margin:10px 0 2px; font-variant-numeric:tabular-nums;}
+  .cd-big small{font-size:16px; font-weight:400; color:var(--muted); margin-left:4px;}
+  .cd-hms{font-size:18px; color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:1px;}
+  .cd-note{font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5;}
+  .cd-ops{position:absolute; top:10px; right:10px; display:flex; gap:6px;}
+  .cd-ops button{border:none; background:#f2efec; border-radius:6px; font-size:12px; padding:3px 9px; cursor:pointer; color:#555;}
+  .cd-ops button:hover{background:#e4ded8;}
+  .cd-form{margin-top:10px; display:flex; flex-direction:column; gap:8px;}
+  .cd-form input{border:1px solid var(--line); border-radius:6px; padding:6px 8px; font-size:13px;}
+  .btn{border:none; border-radius:8px; padding:9px 18px; font-size:14px; cursor:pointer;}
+  .btn-primary{background:var(--red); color:#fff;} .btn-primary:hover{background:var(--red-dark);}
+  .btn-ghost{background:#f2efec; color:#444;} .btn-ghost:hover{background:#e4ded8;}
+  .notice{background:#fff8e6; border:1px solid #ecd9a0; border-radius:10px; padding:12px 14px; font-size:13px; line-height:1.8; margin-bottom:14px;}
+  .notice b{color:var(--warn);}
+  /* ---- 总表 ---- */
+  .filters{display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+  .filters button{border:1px solid var(--line); background:#fff; border-radius:20px; padding:5px 14px; font-size:13px; cursor:pointer;}
+  .filters button.on{background:var(--red); border-color:var(--red); color:#fff;}
+  table.ov{width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:13px;}
+  table.ov th{background:#f2efec; text-align:left; padding:9px 10px; font-size:13px; white-space:nowrap;}
+  table.ov td{border-top:1px solid var(--line); padding:8px 10px; vertical-align:top; line-height:1.55;}
+  table.ov tr.row{cursor:pointer;} table.ov tr.row:hover td{background:#fdf6f4;}
+  .dot{display:inline-block; width:10px; height:10px; border-radius:50%; background:#ddd;}
+  .dot.part{background:var(--warn);} .dot.full{background:var(--ok);}
+  /* ---- 设置 ---- */
+  textarea.json{width:100%; min-height:260px; font-family:Consolas,monospace; font-size:12px; border:1px solid var(--line); border-radius:8px; padding:10px; line-height:1.5;}
+  .set-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+  .msg{font-size:13px; margin-top:8px; min-height:18px;}
+  .msg.ok{color:var(--ok);} .msg.err{color:var(--red);}
+  /* ---- 番茄钟 ---- */
+  .timer-card{display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:linear-gradient(135deg,#3b3b3b,#1f1f1f); color:#fff; border:none;}
+  .tm-display{font-size:40px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:2px; min-width:170px; line-height:1.1;}
+  .tm-display.run{color:#ffd54d;}
+  .tm-modes{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;}
+  .tm-modes button{border:1px solid rgba(255,255,255,.35); background:none; color:#ddd; border-radius:20px; padding:4px 12px; font-size:12px; cursor:pointer;}
+  .tm-modes button.on{background:#ffd54d; color:#333; border-color:#ffd54d; font-weight:700;}
+  .tm-ops{display:flex; gap:8px; flex-wrap:wrap;}
+  .tm-ops button{border:none; border-radius:8px; padding:10px 20px; font-size:14px; cursor:pointer; background:rgba(255,255,255,.18); color:#fff;}
+  .tm-ops button.primary{background:var(--red); color:#fff;}
+  .tm-stats{margin-left:auto; font-size:13px; color:#ccc; text-align:right;}
+  .tm-stats b{color:#ffd54d; font-size:17px; font-variant-numeric:tabular-nums;}
+  /* ---- 正确率记录 ---- */
+  .acc-table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px;}
+  .acc-table th{font-size:12px; color:var(--muted); text-align:left; padding:6px 8px; border-bottom:1px solid var(--line);}
+  .acc-table td{padding:6px 8px; border-bottom:1px solid var(--line);}
+  .acc-table input{width:64px; border:1px solid var(--line); border-radius:6px; padding:4px 6px; font-size:13px; font-variant-numeric:tabular-nums;}
+  .acc-table .pct{font-weight:700; color:var(--red); font-variant-numeric:tabular-nums;}
+  .acc-table .pct.hit{color:var(--ok);}
+  .tgt{font-size:11px; color:var(--muted);}
+  /* ---- 统计 ---- */
+  .stat-cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:14px;}
+  .scard{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+  .scard .v{font-size:24px; font-weight:800; color:var(--red); font-variant-numeric:tabular-nums;}
+  .scard .v small{font-size:13px; font-weight:400; color:var(--muted);}
+  .scard .k{font-size:12px; color:var(--muted); margin-top:2px;}
+  .bar-row{display:flex; align-items:center; gap:10px; margin:11px 0;}
+  .bar-row .lbl{width:88px; font-size:13px; text-align:right; flex-shrink:0;}
+  .bar-row .track{flex:1; height:22px; background:#efece8; border-radius:6px; position:relative;}
+  .bar-row .fill{height:100%; border-radius:6px; background:var(--red); min-width:2px; transition:width .3s;}
+  .bar-row .fill.hit{background:var(--ok);}
+  .bar-row .val{width:48px; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;}
+  .bar-row .goal{position:absolute; top:-4px; width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-bottom:10px solid #555; transform:translateX(-6px);}
+  .heat{display:flex; flex-wrap:wrap; gap:4px; margin-top:8px;}
+  .heat .cell{width:27px; height:27px; border-radius:5px; background:#e8e4df; color:#999; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:10px; border:2px solid transparent;}
+  .heat .cell.part{background:#f5cba7; color:#935116;}
+  .heat .cell.full{background:#82c99a; color:#145a32;}
+  .heat .cell.today{border-color:var(--red);}
+  .chart-days{display:flex; align-items:flex-end; gap:3px; height:130px; margin-top:10px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:2px; max-width:640px;}
+  .chart-days .col{width:16px; background:#d9a08c; border-radius:3px 3px 0 0; min-height:2px; cursor:pointer;}
+  .chart-days .col.zero{background:#efece8;}
+  .streak-banner{background:#fdecea; border:1px solid #f5c6c0; border-radius:10px; padding:10px 14px; font-size:13px; line-height:1.7; margin-bottom:14px; display:none;}
+  .streak-banner b{color:var(--red);}
+  footer{text-align:center; font-size:12px; color:var(--muted); padding:20px;}
+  @media (max-width:600px){ .cd-big{font-size:32px;} main{padding:12px 8px 50px;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>国考打卡 · 2027年度国考（行政执法类）</h1>
+  <div class="sub">双线备考 2026-10-15 ～ 12-05 · 国考 11-29（目标125＝行测65+申论60）· 省考 12-06（目标68＝行测71+申论65）</div>
+  <div id="now"></div>
+  <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+  <div class="prog-txt" id="progTxt"></div>
+  <div class="prog-txt" id="streakTxt"></div>
+</header>
+
+<nav id="tabs">
+  <button data-tab="today" class="active">今日任务</button>
+  <button data-tab="countdown">倒计时</button>
+  <button data-tab="stats">统计</button>
+  <button data-tab="overview">任务总表</button>
+  <button data-tab="settings">设置</button>
+</nav>
+
+<main>
+  <!-- ============ 今日任务 ============ -->
+  <section id="tab-today" class="active">
+    <div class="daynav">
+      <button id="prevDay">‹ 前一天</button>
+      <input type="date" id="datePick">
+      <button id="nextDay">后一天 ›</button>
+      <button id="goToday">回到今天</button>
+      <span id="dayIdx" style="font-size:13px;color:var(--muted);"></span>
+    </div>
+    <div class="card timer-card">
+      <div>
+        <div class="tm-display" id="tmDisplay">50:00</div>
+        <div class="tm-modes">
+          <button data-min="50" class="on">专注50分</button>
+          <button data-min="25">番茄25分</button>
+          <button data-min="0">正计时</button>
+        </div>
+      </div>
+      <div class="tm-ops">
+        <button class="primary" id="tmStart">开始</button>
+        <button id="tmReset">重置</button>
+      </div>
+      <div class="tm-stats">今日：<b id="tmPomos">0</b> 个番茄 · 学习 <b id="tmMins">0</b> 分钟<br><span style="font-size:11px;">专注中的时长会自动计入当日学习时长</span></div>
+    </div>
+    <div class="card">
+      <div class="day-head">
+        <span class="date" id="dTitle"></span>
+        <span class="badge" id="dStage"></span>
+      </div>
+      <div class="focus" id="dFocus"></div>
+      <div id="groups"></div>
+      <div class="grp" id="cuGrp">
+        <h3>自定义任务 <span class="cnt" id="cuCnt"></span></h3>
+        <div id="cuList"></div>
+        <div class="cu-add">
+          <input type="text" id="cuInput" placeholder="临时加一条（如：补资料分析20题）——回车添加，只加在这一天">
+          <button id="cuAddBtn">＋ 添加</button>
+        </div>
+      </div>
+      <div class="daydone">
+        <div class="ring">今日完成 <b id="dayPct">0%</b>（<span id="dayCnt"></span>）</div>
+      </div>
+      <div class="coach-box" id="coachBox">
+        <div class="coach-head">
+          <span>🧑‍🏫 教练分析（按当天成绩自动生成）</span>
+          <button class="coach-btn" id="coachFill">填入下方记录 ↓</button>
+        </div>
+        <div class="coach-body" id="coachBody"></div>
+      </div>
+      <div class="note-label">📝 当日记录（错因 / 正确率数字 / 状态）：</div>
+      <textarea class="note-area" id="dayNote" placeholder="例：资料20题 24min 18/20；图推错在一笔画，明天专项"></textarea>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:4px;">📊 今日模块正确率（做完就填，统计页全靠它）</h3>
+      <p class="hint" style="margin:0 0 4px;">填「做对数 / 总题数」，例：资料 17 / 20。当天多轮练习就填合计数。</p>
+      <table class="acc-table"><thead><tr><th>模块</th><th>做对</th><th>总题数</th><th>正确率</th><th>目标线</th></tr></thead><tbody id="accBody"></tbody></table>
+    </div>
+    <div class="hint">勾选即自动保存到本浏览器（localStorage）。换浏览器/换电脑前，先到「设置」导出打卡记录备份。</div>
+  </section>
+
+  <!-- ============ 倒计时 ============ -->
+  <section id="tab-countdown">
+    <div class="notice" id="noticeBox">
+      <b>官方节点（2027年度国考公告，2026-10-13发布，以公告为准）：</b><br>
+      ① 注册认证：10/14 8:00 ～ 10/23 18:00　② <b>提交报考申请：10/15 8:00 ～ 10/24 18:00</b>（每次只能选报1个职位）<br>
+      ③ 资格审查结果查询：10/15 ～ 10/26 18:00（10/24 18:00 后不能改报）　④ 报名序号查询：10/28 8:00 后<br>
+      ⑤ <b>报名确认+缴费：11/1 0:00 ～ 11/6 24:00</b>（逾期视为放弃！）　⑥ <b>打印准考证：11/23 0:00 ～ 11/29 15:00</b><br>
+      ⑦ 笔试：11/29 上午 9:00–11:00 行测，下午 14:00–17:00 申论　·　专题网站：bm.scs.gov.cn/kl2027
+    </div>
+    <div class="cd-grid" id="cdGrid"></div>
+    <div style="margin-top:14px;">
+      <button class="btn btn-primary" id="addCd">＋ 添加倒计时</button>
+      <span style="font-size:12px;color:var(--muted);margin-left:8px;">卡片可编辑/删除，自定义后自动保存，方便以后其他考试复用</span>
+    </div>
+  </section>
+
+  <!-- ============ 统计 ============ -->
+  <section id="tab-stats">
+    <div class="streak-banner" id="missBanner"></div>
+    <div class="stat-cards" id="statCards"></div>
+    <div class="card">
+      <h3 style="margin-bottom:10px;">模块正确率
+        <select id="accRange" style="margin-left:8px;font-size:13px;border:1px solid var(--line);border-radius:6px;padding:3px 6px;">
+          <option value="7">近7天</option>
+          <option value="30">近30天</option>
+          <option value="0">全部</option>
+        </select>
+      </h3>
+      <div id="accBars"></div>
+      <div class="hint">▲ 灰色三角为目标线：资料85% · 言语75% · 判断80% · 数量40% · 常识50% · 申论小题60%（按采分点）。绿=达标，红=未达标。</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:6px;">每日学习时长（分钟 · 最近14天）</h3>
+      <div class="chart-days" id="dayChart"></div>
+      <div class="hint">柱子来自番茄钟/正计时的累计时长。悬停看具体分钟数。</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:6px;">全程打卡热力图（45天 + 考试日）</h3>
+      <div class="heat" id="heat"></div>
+      <div class="hint">灰=未开始 · 橙=部分完成 · 绿=全部完成 · 红框=今天。点格子跳到那天。</div>
+    </div>
+  </section>
+
+  <!-- ============ 任务总表 ============ -->
+  <section id="tab-overview">
+    <div class="filters" id="filters"></div>
+    <table class="ov">
+      <thead><tr><th>状态</th><th>日期</th><th>周</th><th>阶段</th><th>行测任务</th><th>申论任务</th><th>常识/复盘</th><th>当日重点</th></tr></thead>
+      <tbody id="ovBody"></tbody>
+    </table>
+    <div class="hint">● 绿=当日全部勾完　● 橙=部分完成　● 灰=未开始。点击任意行跳到该天打卡。</div>
+  </section>
+
+  <!-- ============ 设置 ============ -->
+  <section id="tab-settings">
+    <div class="card">
+      <h3 style="margin-bottom:8px;">任务数据（JSON）</h3>
+      <p class="hint" style="margin:0 0 8px;">改这里即可复用：d=日期 w=周几 s=阶段 x=行测 sl=申论 c=常识/复盘 f=当日重点。同一格内用「；」分隔多个可勾选小项。改完点保存，页面立即生效。</p>
+      <textarea class="json" id="planJson"></textarea>
+      <div class="set-row">
+        <button class="btn btn-primary" id="savePlan">保存任务数据</button>
+        <button class="btn btn-ghost" id="resetPlan">恢复默认（45天国考计划）</button>
+      </div>
+      <div class="msg" id="planMsg"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:8px;">打卡记录</h3>
+      <div class="set-row">
+        <button class="btn btn-ghost" id="exportBtn">导出打卡记录(.json)</button>
+        <button class="btn btn-ghost" id="importShow">导入打卡记录</button>
+        <button class="btn btn-ghost" id="wipeBtn" style="color:var(--red);">清空全部数据</button>
+      </div>
+      <div id="importBox" style="display:none; margin-top:10px;">
+        <textarea class="json" id="importJson" style="min-height:120px;" placeholder="把导出的 JSON 粘贴到这里"></textarea>
+        <div class="set-row"><button class="btn btn-primary" id="importBtn">确认导入</button></div>
+      </div>
+      <div class="msg" id="dataMsg"></div>
+    </div>
+  </section>
+</main>
+<footer>单文件离线页 · 数据仅存本浏览器 · 完整版 v1.1 · 换设备先到「设置」导出备份</footer>
+
+<script src="sync.js"></script>
+<script>
+/* ================= 默认数据：45天备考 + 考试日 ================= */
+const DEFAULT_PLAN=[];/* 计划已移至私有仓库，运行时从云端载入 */
+
+const DEFAULT_COUNTDOWNS=[];/* 同样移至云端 */
+
+/* ================= 存取 ================= */
+const LS={plan:"gkdaka.v1.plan",ck:"gkdaka.v1.checkins",cd:"gkdaka.v1.countdowns"};
+function load(key,def){try{const v=localStorage.getItem(key);return v?JSON.parse(v):def;}catch(e){return def;}}
+function save(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}
+  try{ if(typeof CloudSync!=='undefined' && PLAN && PLAN.length){ CloudSync.push({plan:PLAN,checkins:CHECKINS,countdowns:CDS}); } }catch(e){}
+}
+let PLAN=load(LS.plan,DEFAULT_PLAN);
+let CHECKINS=load(LS.ck,{});
+let CDS=load(LS.cd,DEFAULT_COUNTDOWNS);
+/* 计划与倒计时已移至私有仓库；本地为空时由云端载入 */
+/* 新增的默认倒计时自动补齐（同 id 已有的不覆盖，用户改过的不动） */
+(function(){var ch=false;DEFAULT_COUNTDOWNS.forEach(function(dd){if(!CDS.some(function(x){return x.id===dd.id;})){CDS.push(dd);ch=true;}});if(ch)save(LS.cd,CDS);})();
+function pad(n){return String(n).padStart(2,"0");}
+/* 以睡觉时间为界：凌晨 DAY_CUTOFF_HOUR 点之前，仍算前一天 */
+const DAY_CUTOFF_HOUR=6;
+function logicalNow(){const t=new Date();t.setHours(t.getHours()-DAY_CUTOFF_HOUR);return t;}
+function todayStr(){const t=logicalNow();return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());}
+let curDate=todayStr();
+function findDay(ds){return PLAN.find(p=>p.d===ds);}
+function splitItems(txt){if(!txt)return [];return txt.split(/[；;]/).map(s=>s.trim()).filter(s=>s&&s!=="—"&&s!=="无");}
+function dayItems(p){return{x:splitItems(p.x),sl:splitItems(p.sl),c:splitItems(p.c)};}
+function dayState(ds){if(!CHECKINS[ds])CHECKINS[ds]={items:{},note:""};if(!CHECKINS[ds].items)CHECKINS[ds].items={};if(!CHECKINS[ds].custom)CHECKINS[ds].custom=[];return CHECKINS[ds];}
+function customItems(ds){const st=CHECKINS[ds];return (st&&st.custom)?st.custom:[];}
+function addCustom(ds,txt){const st=dayState(ds);st.custom.push(txt);save(LS.ck,CHECKINS);}
+function delCustom(ds,i){
+  const st=dayState(ds);
+  st.custom.splice(i,1);
+  const ni={};
+  Object.keys(st.items||{}).forEach(k=>{
+    const m=k.match(/^cu_(\d+)$/);
+    if(m){const n=parseInt(m[1]);if(n<i)ni[k]=1;else if(n>i)ni["cu_"+(n-1)]=1;}
+    else ni[k]=st.items[k];
+  });
+  st.items=ni;save(LS.ck,CHECKINS);
+}
+function dayProgress(p){
+  const it=dayItems(p);const cu=customItems(p.d);
+  const total=it.x.length+it.sl.length+it.c.length+cu.length;
+  if(!total)return{done:0,total:0};
+  const st=CHECKINS[p.d]||{items:{}};let done=0;
+  for(const g of["x","sl","c"])it[g].forEach((_,i)=>{if(st.items&&st.items[g+"_"+i])done++;});
+  cu.forEach((_,i)=>{if(st.items&&st.items["cu_"+i])done++;});
+  return{done,total};
+}
+
+/* ================= 页签 ================= */
+document.querySelectorAll("#tabs button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll("main section").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    document.getElementById("tab-"+b.dataset.tab).classList.add("active");
+    if(b.dataset.tab==="stats")renderStats();
+  };
+});
+
+/* ================= 头部时钟 + 总进度 ================= */
+function tickHeader(){
+  const t=new Date();
+  const lt=logicalNow();
+  const wk="日一二三四五六"[t.getDay()];
+  const calStr=t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());
+  let hdrTxt=calStr+" 周"+wk+" "+pad(t.getHours())+":"+pad(t.getMinutes())+":"+pad(t.getSeconds());
+  if(calStr!==todayStr()){
+    hdrTxt+="　→　按 "+todayStr()+" 周"+"日一二三四五六"[lt.getDay()]+" 计（凌晨归前一天）";
+  }
+  document.getElementById("now").textContent=hdrTxt;
+  const prepDays=PLAN.filter(p=>p.s!=="考试");
+  let full=0,part=0;
+  prepDays.forEach(p=>{const pr=dayProgress(p);if(pr.total&&pr.done===pr.total)full++;else if(pr.done>0)part++;});
+  const pct=Math.round(full/prepDays.length*100);
+  document.getElementById("progBar").style.width=pct+"%";
+  document.getElementById("progTxt").textContent=prepDays.length+"天打卡进度：全部完成 "+full+" 天 · 部分完成 "+part+" 天（"+pct+"%）";
+  const todayP=findDay(todayStr());
+  const tDone=todayP?dayProgress(todayP).done>0:false;
+  const hour=lt.getHours();
+  let stTxt="🔥 连续打卡 "+streakCalc()+" 天";
+  if(todayP&&!tDone)stTxt+=(hour>=20?" · ⏰ 今天还没打卡（已过20点）":" · 今天还没打卡");
+  if(!todayP)stTxt+=" · 今天不在备考期内";
+  document.getElementById("streakTxt").textContent=stTxt;
+}
+
+/* ================= 今日任务 ================= */
+const GROUPS=[["x","行测任务"],["sl","申论任务"],["c","常识 / 复盘"]];
+function renderToday(){
+  const pick=document.getElementById("datePick");
+  pick.value=curDate;pick.min=PLAN[0].d;pick.max=PLAN[PLAN.length-1].d;
+  const idx=PLAN.findIndex(p=>p.d===curDate);
+  const p=idx>=0?PLAN[idx]:null;
+  document.getElementById("dayIdx").textContent=p?("第 "+(idx+1)+" / "+PLAN.length+" 天"):"";
+  const title=document.getElementById("dTitle"),stage=document.getElementById("dStage"),
+        focus=document.getElementById("dFocus"),groups=document.getElementById("groups");
+  if(!p){
+    title.textContent=curDate;stage.textContent="计划外";focus.innerHTML="该日期不在计划内，用上下按钮选一天。";groups.innerHTML="";
+    document.getElementById("cuGrp").style.display="none";
+    renderAcc();return;
+  }
+  document.getElementById("cuGrp").style.display="";
+  title.textContent=p.d.replace("2026-","")+" 周"+p.w;
+  const sc=p.s==="一"?"":p.s==="二"?"stage2":p.s==="三"?"stage3":p.s==="四"?"stage4":p.s==="五"?"stage5":"exam";
+  stage.className="badge "+sc;
+  stage.textContent=p.s==="考试"?"考试日":"阶段"+p.s;
+  focus.innerHTML="<b>当日重点：</b>"+(p.f||"—");
+  const st=dayState(p.d);
+  const it=dayItems(p);
+  let html="";
+  GROUPS.forEach(([g,label])=>{
+    const items=it[g];if(!items.length)return;
+    const cnt=items.filter((_,i)=>st.items[g+"_"+i]).length;
+    html+='<div class="grp"><h3>'+label+' <span class="cnt">'+cnt+'/'+items.length+'</span></h3>';
+    items.forEach((txt,i)=>{
+      const key=g+"_"+i,done=!!st.items[key];
+      html+='<label class="task'+(done?" done":"")+'"><input type="checkbox" data-k="'+key+'"'+(done?" checked":"")+'><span>'+esc(txt)+'</span></label>';
+    });
+    html+="</div>";
+  });
+  groups.innerHTML=html;
+  /* ---- 自定义任务渲染 ---- */
+  const cuList=document.getElementById("cuList");
+  const cu=customItems(p.d);
+  cuList.innerHTML=cu.map((txt,i)=>{
+    const key="cu_"+i,done=!!st.items[key];
+    return '<div class="cu-row"><label class="task'+(done?" done":"")+'"><input type="checkbox" data-k="'+key+'"'+(done?" checked":"")+'><span>'+esc(txt)+'</span></label>'+
+      '<button class="cu-del" data-i="'+i+'" title="删除这条">✕</button></div>';
+  }).join("");
+  const cuDone=cu.filter((_,i)=>st.items["cu_"+i]).length;
+  document.getElementById("cuCnt").textContent=cu.length?cuDone+"/"+cu.length:"";
+  cuList.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+    cb.onchange=()=>{
+      const s=dayState(p.d);
+      if(cb.checked)s.items[cb.dataset.k]=1;else delete s.items[cb.dataset.k];
+      save(LS.ck,CHECKINS);renderToday();renderOverview();tickHeader();
+    };
+  });
+  cuList.querySelectorAll(".cu-del").forEach(b=>{
+    b.onclick=e=>{
+      e.preventDefault();
+      const i=parseInt(b.dataset.i);
+      if(!confirm("删除自定义任务「"+cu[i]+"」？"))return;
+      delCustom(p.d,i);renderToday();renderOverview();tickHeader();
+    };
+  });
+  const cuInput=document.getElementById("cuInput");
+  cuInput.value="";
+  const doAdd=()=>{
+    const v=cuInput.value.trim();if(!v)return;
+    addCustom(p.d,v);cuInput.value="";renderToday();renderOverview();tickHeader();
+  };
+  document.getElementById("cuAddBtn").onclick=doAdd;
+  cuInput.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();doAdd();}};
+  groups.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+    cb.onchange=()=>{
+      const s=dayState(p.d);
+      if(cb.checked)s.items[cb.dataset.k]=1;else delete s.items[cb.dataset.k];
+      save(LS.ck,CHECKINS);renderToday();renderOverview();tickHeader();
+    };
+  });
+  const pr=dayProgress(p);
+  document.getElementById("dayPct").textContent=pr.total?Math.round(pr.done/pr.total*100)+"%":"—";
+  document.getElementById("dayCnt").textContent=pr.done+" / "+pr.total+" 项";
+  const note=document.getElementById("dayNote");
+  note.value=st.note||"";
+  note.oninput=()=>{dayState(p.d).note=note.value;save(LS.ck,CHECKINS);};
+  /* 教练分析：来自计划里的 an 字段 */
+  const cb=document.getElementById("coachBox"),cbody=document.getElementById("coachBody"),cfill=document.getElementById("coachFill");
+  if(p.an){cb.classList.add("on");cbody.textContent=p.an;}
+  else{cb.classList.remove("on");cbody.textContent="";}
+  cfill.onclick=()=>{
+    if(!p.an)return;
+    const cur=note.value.trim();
+    note.value=cur?(cur+"\n\n"+p.an):p.an;
+    dayState(p.d).note=note.value;save(LS.ck,CHECKINS);
+    note.scrollIntoView({behavior:"smooth",block:"center"});
+  };
+  renderAcc();
+}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function shiftDay(n){
+  const idx=PLAN.findIndex(p=>p.d===curDate);
+  let ni=idx<0?0:idx+n;
+  ni=Math.max(0,Math.min(PLAN.length-1,ni));
+  curDate=PLAN[ni].d;renderToday();
+}
+document.getElementById("prevDay").onclick=()=>shiftDay(-1);
+document.getElementById("nextDay").onclick=()=>shiftDay(1);
+document.getElementById("goToday").onclick=()=>{curDate=todayStr();renderToday();};
+document.getElementById("datePick").onchange=e=>{curDate=e.target.value;renderToday();};
+
+/* ================= 倒计时 ================= */
+function fmtTarget(s){return s.replace("T"," ").slice(0,16);}
+function renderCountdowns(){
+  const grid=document.getElementById("cdGrid");
+  grid.innerHTML="";
+  CDS.forEach(cd=>{
+    const div=document.createElement("div");
+    div.className="cd-card";div.dataset.id=cd.id;
+    div.innerHTML=
+      '<div class="cd-ops"><button data-op="edit">编辑</button><button data-op="del">删除</button></div>'+
+      '<div class="cd-title">'+esc(cd.title)+'</div>'+
+      '<div class="cd-target">目标时间：'+fmtTarget(cd.target)+'</div>'+
+      '<div class="cd-big" data-role="days">--</div>'+
+      '<div class="cd-hms" data-role="hms">--:--:--</div>'+
+      (cd.note?'<div class="cd-note">'+esc(cd.note)+'</div>':'');
+    div.querySelector('[data-op=edit]').onclick=()=>editCd(cd,div);
+    div.querySelector('[data-op=del]').onclick=()=>{
+      if(confirm("删除倒计时「"+cd.title+"」？")){CDS=CDS.filter(x=>x.id!==cd.id);save(LS.cd,CDS);renderCountdowns();}
+    };
+    grid.appendChild(div);
+  });
+  tickCountdowns();
+}
+function tickCountdowns(){
+  const now=Date.now();
+  document.querySelectorAll("#cdGrid .cd-card").forEach(card=>{
+    const cd=CDS.find(x=>x.id===card.dataset.id);if(!cd)return;
+    const diff=new Date(cd.target).getTime()-now;
+    const daysEl=card.querySelector('[data-role=days]'),hmsEl=card.querySelector('[data-role=hms]');
+    card.classList.toggle("past",diff<=0);
+    card.classList.toggle("urgent",diff>0&&diff<3*864e5);
+    if(diff<=0){
+      const past=-diff;const pd=Math.floor(past/864e5);
+      daysEl.innerHTML=(pd>0?pd+" 天前已到达":"已到时刻");
+      hmsEl.textContent=pd>0?("已过 "+pd+" 天 "+new Date(past%864e5).toISOString().substr(11,8)):new Date(past%864e5).toISOString().substr(11,8);
+    }else{
+      const d=Math.floor(diff/864e5);
+      daysEl.innerHTML=d+'<small>天</small>';
+      hmsEl.textContent=new Date(diff%864e5).toISOString().substr(11,8);
+    }
+  });
+}
+function editCd(cd,card){
+  if(card.querySelector(".cd-form"))return;
+  const form=document.createElement("div");
+  form.className="cd-form";
+  form.innerHTML='<input type="text" class="f-title" value="'+esc(cd.title)+'" placeholder="标题">'+
+    '<input type="datetime-local" class="f-target" value="'+cd.target.slice(0,16)+'">'+
+    '<input type="text" class="f-note" value="'+esc(cd.note||"")+'" placeholder="备注（可空）">'+
+    '<div style="display:flex;gap:8px;"><button class="btn btn-primary f-save">保存</button><button class="btn btn-ghost f-cancel">取消</button></div>';
+  card.appendChild(form);
+  form.querySelector(".f-save").onclick=()=>{
+    cd.title=form.querySelector(".f-title").value.trim()||cd.title;
+    const t=form.querySelector(".f-target").value;
+    if(t)cd.target=t.length===16?t+":00":t;
+    cd.note=form.querySelector(".f-note").value.trim();
+    save(LS.cd,CDS);renderCountdowns();
+  };
+  form.querySelector(".f-cancel").onclick=()=>form.remove();
+}
+document.getElementById("addCd").onclick=()=>{
+  const title=prompt("倒计时名称：","新倒计时");
+  if(title===null)return;
+  const target=prompt("目标时间（格式 2026-12-01 09:00）：","2026-12-01 09:00");
+  if(!target)return;
+  const t=target.trim().replace(" ","T");
+  if(isNaN(new Date(t).getTime())){alert("时间格式不对");return;}
+  CDS.push({id:"cd"+Date.now(),title:title||"新倒计时",target:t.length===16?t+":00":t,note:""});
+  save(LS.cd,CDS);renderCountdowns();
+};
+
+/* ================= 任务总表 ================= */
+let ovFilter="全部";
+function renderFilters(){
+  const stages=["全部","一","二","三","四","五","考试"];
+  const box=document.getElementById("filters");
+  box.innerHTML="";
+  stages.forEach(s=>{
+    const b=document.createElement("button");
+    b.textContent=s==="全部"?"全部":("阶段"+s);
+    if(s===ovFilter)b.classList.add("on");
+    b.onclick=()=>{ovFilter=s;renderFilters();renderOverview();};
+    box.appendChild(b);
+  });
+}
+function renderOverview(){
+  const tb=document.getElementById("ovBody");
+  tb.innerHTML="";
+  PLAN.forEach(p=>{
+    if(ovFilter!=="全部"&&p.s!==ovFilter)return;
+    const pr=dayProgress(p);
+    const cls=pr.total===0?"":pr.done===pr.total?"full":pr.done>0?"part":"";
+    const tr=document.createElement("tr");
+    tr.className="row";
+    tr.innerHTML='<td><span class="dot '+cls+'"></span></td><td style="white-space:nowrap;">'+p.d.slice(5)+'</td><td>'+p.w+'</td><td>'+p.s+
+      '</td><td>'+esc(p.x||"—")+'</td><td>'+esc(p.sl||"—")+'</td><td>'+esc(p.c||"—")+'</td><td style="white-space:nowrap;">'+esc(p.f||"—")+'</td>';
+    tr.onclick=()=>{
+      curDate=p.d;renderToday();
+      document.querySelector('#tabs button[data-tab=today]').click();
+      window.scrollTo(0,0);
+    };
+    tb.appendChild(tr);
+  });
+}
+
+/* ================= 设置 ================= */
+function renderSettings(){
+  document.getElementById("planJson").value=JSON.stringify(PLAN,null,1);
+}
+function flash(id,txt,ok){
+  const el=document.getElementById(id);
+  el.textContent=txt;el.className="msg "+(ok?"ok":"err");
+  setTimeout(()=>{el.textContent="";},4000);
+}
+document.getElementById("savePlan").onclick=()=>{
+  try{
+    const v=JSON.parse(document.getElementById("planJson").value);
+    if(!Array.isArray(v)||!v.length)throw new Error("需要是非空数组");
+    v.forEach((p,i)=>{if(!p.d)throw new Error("第"+(i+1)+"条缺 d(日期)");});
+    PLAN=v;save(LS.plan,PLAN);
+    if(!findDay(curDate))curDate=PLAN[0].d;
+    renderToday();renderOverview();tickHeader();
+    flash("planMsg","已保存，共 "+PLAN.length+" 天",true);
+  }catch(e){flash("planMsg","保存失败："+e.message,false);}
+};
+document.getElementById("resetPlan").onclick=()=>{
+  if(!confirm("恢复默认45天国考计划？自定义的任务数据会被覆盖（打卡记录保留）。"))return;
+  PLAN=DEFAULT_PLAN;localStorage.removeItem(LS.plan);
+  renderSettings();renderToday();renderOverview();tickHeader();
+  flash("planMsg","已恢复默认计划",true);
+};
+document.getElementById("exportBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify({exported:new Date().toISOString(),checkins:CHECKINS,countdowns:CDS},null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="国考打卡记录-"+todayStr()+".json";
+  a.click();URL.revokeObjectURL(a.href);
+  flash("dataMsg","已导出",true);
+};
+document.getElementById("importShow").onclick=()=>{
+  const b=document.getElementById("importBox");
+  b.style.display=b.style.display==="none"?"block":"none";
+};
+document.getElementById("importBtn").onclick=()=>{
+  try{
+    const v=JSON.parse(document.getElementById("importJson").value);
+    if(v.checkins)CHECKINS=v.checkins;
+    if(v.countdowns)CDS=v.countdowns;
+    save(LS.ck,CHECKINS);save(LS.cd,CDS);
+    renderToday();renderOverview();renderCountdowns();tickHeader();
+    flash("dataMsg","导入成功",true);
+  }catch(e){flash("dataMsg","导入失败："+e.message,false);}
+};
+document.getElementById("wipeBtn").onclick=()=>{
+  if(!confirm("清空全部打卡记录、倒计时自定义和任务数据修改？此操作不可恢复。"))return;
+  localStorage.removeItem(LS.ck);localStorage.removeItem(LS.cd);localStorage.removeItem(LS.plan);
+  CHECKINS={};CDS=DEFAULT_COUNTDOWNS;PLAN=DEFAULT_PLAN;
+  renderSettings();renderToday();renderOverview();renderCountdowns();tickHeader();
+  flash("dataMsg","已清空",true);
+};
+
+/* ================= 模块正确率记录 ================= */
+const MODULES=[
+  {k:"zl",n:"资料分析",t:80},{k:"ys",n:"言语理解",t:75},
+  {k:"tu",n:"图形推理",t:70},{k:"lt",n:"类比推理",t:75},
+  {k:"dy",n:"定义判断",t:75},{k:"lj",n:"逻辑判断",t:85},
+  {k:"sl2",n:"数量关系",t:50},{k:"cs",n:"常识/时政",t:55},{k:"shen",n:"申论小题",t:60}
+];
+function renderAcc(){
+  const p=findDay(curDate);
+  const tb=document.getElementById("accBody");
+  if(!p){tb.innerHTML="";return;}
+  const st=dayState(p.d); st.acc=st.acc||{};
+  tb.innerHTML="";
+  MODULES.forEach(m=>{
+    const a=st.acc[m.k]||{d:"",t:""};
+    const tr=document.createElement("tr");
+    tr.innerHTML='<td>'+m.n+'</td>'+
+      '<td><input data-f="d" inputmode="numeric" value="'+(a.d===""?"":a.d)+'"></td>'+
+      '<td><input data-f="t" inputmode="numeric" value="'+(a.t===""?"":a.t)+'"></td>'+
+      '<td class="pct"></td>'+
+      '<td class="tgt">≥'+m.t+'%</td>';
+    tb.appendChild(tr);
+    const dIn=tr.querySelector('[data-f=d]');
+    const tIn=tr.querySelector('[data-f=t]');
+    const pctTd=tr.querySelector('.pct');
+    const upd=()=>{
+      const s=dayState(p.d); s.acc=s.acc||{}; s.acc[m.k]=s.acc[m.k]||{d:"",t:""};
+      s.acc[m.k].d=dIn.value===""?"":Math.max(0,parseInt(dIn.value)||0);
+      s.acc[m.k].t=tIn.value===""?"":Math.max(0,parseInt(tIn.value)||0);
+      const v=s.acc[m.k];
+      const pct=(v.d!==""&&v.t>0)?Math.round(v.d/v.t*100):null;
+      pctTd.textContent=pct==null?"—":pct+"%";
+      pctTd.className="pct"+(pct!=null&&pct>=m.t?" hit":"");
+      save(LS.ck,CHECKINS);
+      if(document.getElementById("tab-stats").classList.contains("active"))renderStats();
+    };
+    dIn.oninput=upd; tIn.oninput=upd;
+    const pct=(a.d!==""&&a.t>0)?Math.round(a.d/a.t*100):null;
+    pctTd.textContent=pct==null?"—":pct+"%";
+    pctTd.className="pct"+(pct!=null&&pct>=m.t?" hit":"");
+  });
+}
+/* ================= 番茄钟 / 学习计时 ================= */
+let TM={mode:50,remain:50*60,running:false,timer:null,elapsed:0,committed:0};
+const tmDisplay=document.getElementById("tmDisplay");
+function fmtT(s){s=Math.max(0,Math.round(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;return (h?pad(h)+":":"")+pad(m)+":"+pad(ss);}
+function tmRender(){
+  tmDisplay.textContent=fmtT(TM.mode===0?TM.elapsed:TM.remain);
+  tmDisplay.classList.toggle("run",TM.running);
+}
+function tmStats(){
+  const st=CHECKINS[todayStr()]||{};
+  document.getElementById("tmPomos").textContent=st.pomos||0;
+  document.getElementById("tmMins").textContent=Math.round((st.studySec||0)/60);
+}
+function tmCommit(sec){
+  if(sec<=0)return;
+  const st=dayState(todayStr());
+  st.studySec=(st.studySec||0)+sec;
+  save(LS.ck,CHECKINS);tmStats();
+}
+function tmFlush(){const d=TM.elapsed-TM.committed;if(d>0){TM.committed=TM.elapsed;tmCommit(d);}}
+function tmTick(){
+  if(TM.mode===0){TM.elapsed++;}
+  else{
+    TM.remain--;TM.elapsed++;
+    if(TM.elapsed-TM.committed>=60)tmFlush();
+    if(TM.remain<=0){
+      tmFlush();tmStop(false);
+      const st=dayState(todayStr());st.pomos=(st.pomos||0)+1;save(LS.ck,CHECKINS);
+      beep();tmStats();
+      TM.remain=TM.mode*60;TM.elapsed=0;TM.committed=0;
+      setTimeout(()=>alert("🍅 专注 "+TM.mode+" 分钟完成！休息 5 分钟再开始下一个。"),60);
+    }
+  }
+  tmRender();
+  document.title=TM.running?"▶ "+tmDisplay.textContent+" · 国考打卡":"国考打卡 · 2027国考（行政执法类）";
+}
+function tmStart(){
+  if(TM.running){tmFlush();clearInterval(TM.timer);TM.running=false;document.getElementById("tmStart").textContent="继续";}
+  else{TM.running=true;document.getElementById("tmStart").textContent="暂停";TM.timer=setInterval(tmTick,1000);}
+  tmRender();
+}
+function tmStop(reset){
+  if(TM.running){tmFlush();clearInterval(TM.timer);}
+  TM.running=false;document.getElementById("tmStart").textContent="开始";
+  if(reset){TM.remain=TM.mode*60;TM.elapsed=0;TM.committed=0;}
+  tmRender();
+}
+document.querySelectorAll(".tm-modes button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".tm-modes button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");tmStop(false);
+    TM.mode=parseInt(b.dataset.min);TM.remain=TM.mode*60;TM.elapsed=0;TM.committed=0;
+    tmRender();
+  };
+});
+document.getElementById("tmStart").onclick=tmStart;
+document.getElementById("tmReset").onclick=()=>tmStop(true);
+function beep(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;const ac=new AC();
+    [0,300,600].forEach((ms,i)=>setTimeout(()=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.frequency.value=i===2?880:660;
+      g.gain.setValueAtTime(.25,ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.25);
+      o.start();o.stop(ac.currentTime+.25);
+    },ms));
+  }catch(e){}
+}
+/* ================= 统计 ================= */
+function streakCalc(){
+  const byDate={};PLAN.forEach(p=>{byDate[p.d]=dayProgress(p).done>0;});
+  const iso=t=>t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());
+  let dt=logicalNow();
+  if(!byDate[iso(dt)])dt.setDate(dt.getDate()-1); /* 今天还没打不算断 */
+  let n=0;
+  for(;;){
+    const k=iso(dt);
+    if(byDate[k]){n++;dt.setDate(dt.getDate()-1);}
+    else break;
+  }
+  return n;
+}
+function sc(k,v){return '<div class="scard"><div class="v">'+v+'</div><div class="k">'+k+'</div></div>';}
+function renderStats(){
+  const prep=PLAN.filter(p=>p.s!=="考试");
+  let full=0,studySec=0,pomos=0;
+  prep.forEach(p=>{
+    const pr=dayProgress(p);
+    if(pr.total&&pr.done===pr.total)full++;
+    const st=CHECKINS[p.d];
+    if(st){studySec+=st.studySec||0;pomos+=st.pomos||0;}
+  });
+  const hrs=Math.floor(studySec/3600),mins=Math.round(studySec%3600/60);
+  document.getElementById("statCards").innerHTML=
+    sc("连续打卡（今天没打不断）",streakCalc()+" 天")+
+    sc("已完成天数",full+" / "+prep.length+" 天")+
+    sc("累计学习时长",(hrs?hrs+"<small>小时</small>":"")+mins+"<small>分钟</small>")+
+    sc("累计番茄",pomos+" 个");
+  /* 模块正确率聚合 */
+  const R=parseInt(document.getElementById("accRange").value);
+  const cutoff=R?new Date(Date.now()-R*864e5).toISOString().slice(0,10):"0000-00-00";
+  const agg={};MODULES.forEach(m=>agg[m.k]={d:0,t:0});
+  let any=false;
+  prep.forEach(p=>{
+    if(p.d<cutoff)return;
+    const a=(CHECKINS[p.d]||{}).acc;if(!a)return;
+    MODULES.forEach(m=>{
+      const v=a[m.k];
+      if(v&&v.d!==""&&v.t>0){agg[m.k].d+=v.d;agg[m.k].t+=v.t;any=true;}
+    });
+  });
+  const bars=document.getElementById("accBars");
+  bars.innerHTML=any?MODULES.map(m=>{
+    const a=agg[m.k];const pct=a.t?Math.round(a.d/a.t*100):0;const hit=pct>=m.t;
+    return '<div class="bar-row"><div class="lbl">'+m.n+'</div><div class="track">'+
+      '<div class="goal" title="目标'+m.t+'%" style="left:'+m.t+'%"></div>'+
+      '<div class="fill'+(hit?" hit":"")+'" style="width:'+Math.min(pct,100)+'%"></div></div>'+
+      '<div class="val">'+(a.t?pct+"%":"—")+"</div></div>";
+  }).join(""):'<p class="hint">还没有正确率数据——到「今日任务」页底部的「今日模块正确率」填做对/总数。</p>';
+  /* 每日学习时长（最近14天） */
+  const chart=document.getElementById("dayChart");
+  const days=prep.slice(-14);
+  const mx=Math.max(60,...days.map(p=>Math.round(((CHECKINS[p.d]||{}).studySec||0)/60)));
+  chart.innerHTML=days.map(p=>{
+    const m=Math.round(((CHECKINS[p.d]||{}).studySec||0)/60);
+    const h=Math.max(Math.round(m/mx*112),2);
+    return '<div class="col'+(m?"":" zero")+'" title="'+p.d+"：学习 "+m+" 分钟（"+(p.f||"")+'）" style="height:'+h+'px"></div>';
+  }).join("");
+  /* 热力图 */
+  const heat=document.getElementById("heat");
+  const today=todayStr();
+  heat.innerHTML=PLAN.map(p=>{
+    const pr=dayProgress(p);
+    const cls=pr.total?(pr.done===pr.total?"full":(pr.done?"part":"")):"";
+    return '<div class="cell '+cls+(p.d===today?" today":"")+'" title="'+p.d+" · "+(p.f||"")+'" data-d="'+p.d+'">'+p.d.slice(8)+"</div>";
+  }).join("");
+  heat.querySelectorAll(".cell").forEach(c=>{
+    c.onclick=()=>{curDate=c.dataset.d;renderToday();document.querySelector('#tabs button[data-tab=today]').click();window.scrollTo(0,0);};
+  });
+  /* 漏打卡提醒 */
+  const miss=prep.filter(p=>p.d<today&&dayProgress(p).done===0).map(p=>p.d);
+  const mb=document.getElementById("missBanner");
+  if(miss.length){
+    mb.style.display="block";
+    mb.innerHTML="<b>⚠ 漏打卡 "+miss.length+" 天：</b>"+miss.map(d=>d.slice(5)).join("、")+
+      "<br>（别硬补——按当前进度往前走，漏那天的任务扫一眼任务总表，只补「当周复盘」和「错题归档」类）";
+  }else{mb.style.display="none";}
+}
+document.getElementById("accRange").onchange=renderStats;
+
+/* ================= 启动 ================= */
+(function init(){
+  /* 计划和倒计时现在存放在私有仓库：先尝试读云端，拿到后再渲染 */
+  function bootRender(){
+    const inRange=findDay(todayStr());
+    if(!inRange && PLAN.length){curDate=PLAN[0].d;}
+    renderToday();renderFilters();renderOverview();renderCountdowns();renderSettings();tickHeader();tmStats();tmRender();
+    setInterval(()=>{tickHeader();tickCountdowns();},1000);
+  }
+  function showLoading(msg){
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div id="bootMask" style="position:fixed;inset:0;background:#f5f3f0;z-index:99998;'+
+      'display:flex;align-items:center;justify-content:center;font-size:15px;color:#666;'+
+      'font-family:system-ui,-apple-system,\"Microsoft YaHei\",sans-serif">'+msg+'</div>');
+  }
+  function hideLoading(){
+    var m=document.getElementById('bootMask');
+    if(m) m.parentNode.removeChild(m);
+  }
+  var booted=false; if(PLAN && PLAN.length){ booted=true; bootRender(); }
+  else {
+    showLoading('正在读取备考计划…');
+    var done=false;
+    setTimeout(function(){ if(!done){ done=true; hideLoading();
+      showLoading('读取超时：请点底部「设置」检查令牌，或换个网络再试'); } }, 12000);
+  }
+
+  /* ===== 云端同步：拉到云端数据后覆盖本页三块，再重绘 ===== */
+  if(typeof CloudSync!=='undefined'){
+    CloudSync.init({
+      key:'guokao',
+      onRemote:function(d){
+        if(!d) return;
+        /* 注意：这里直接写 localStorage，不走 save()，否则会再次触发推送形成循环 */
+        try{
+          if(d.plan){ PLAN=d.plan; localStorage.setItem(LS.plan,JSON.stringify(PLAN)); }
+          if(d.checkins){ CHECKINS=d.checkins; localStorage.setItem(LS.ck,JSON.stringify(CHECKINS)); }
+            if(d.countdowns){ CDS=d.countdowns; localStorage.setItem(LS.cd,JSON.stringify(CDS)); }
+        }catch(e){}
+        if(!booted && PLAN && PLAN.length){ booted=true; hideLoading(); bootRender(); return; }
+        renderToday();renderOverview();renderCountdowns();renderSettings();tickHeader();
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

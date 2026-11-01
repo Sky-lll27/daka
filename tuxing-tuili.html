@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>图推五步骤与考点方法 · 2027国考</title>
+<style>
+:root{--red:#c0392b;--red-dark:#96281b;--bg:#f5f3f0;--card:#fff;--ink:#2c2c2c;--muted:#8a8a8a;--line:#e8e4df;--ok:#2e8b57;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px;}
+header{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;padding:18px 24px 14px;}
+header h1{font-size:21px;font-weight:700;}
+header .sub{font-size:12px;opacity:.88;margin-top:5px;line-height:1.7;}
+#stat{font-size:12px;margin-top:7px;opacity:.95;}
+nav{display:flex;gap:2px;align-items:center;background:var(--card);border-bottom:1px solid var(--line);padding:0 12px;position:sticky;top:0;z-index:10;flex-wrap:wrap;}
+nav button.tb{border:none;background:none;padding:13px 13px;font-size:14px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;}
+nav button.tb.active{color:var(--red);border-bottom-color:var(--red);font-weight:700;}
+nav .spacer{flex:1;}
+#q{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;width:170px;font-family:inherit;}
+#q:focus{outline:none;border-color:var(--red);}
+#quickAdd{border:none;background:var(--red);color:#fff;border-radius:8px;padding:7px 13px;font-size:13px;cursor:pointer;margin-left:8px;}
+#quickAdd:hover{background:var(--red-dark);}
+main{max-width:1080px;margin:0 auto;padding:18px 16px 70px;}
+section{display:none;} section.active{display:block;}
+.block{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.block h2{font-size:16px;color:var(--red);margin-bottom:10px;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;line-height:1.65;}
+th{background:#faf7f4;font-weight:700;color:#5a4a44;}
+tbody tr:nth-child(even){background:#fcfbfa;}
+td b,li b,h2 b{color:var(--red-dark);}
+ul{margin:2px 0 2px 20px;} li{margin:5px 0;line-height:1.7;}
+pre{background:#2c2c2c;color:#ffe9a8;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.95;overflow-x:auto;font-family:"Cascadia Mono",Consolas,"Microsoft YaHei",monospace;white-space:pre-wrap;}
+.note{margin-top:10px;background:#fff8e6;border:1px dashed #e6c86e;border-radius:8px;padding:10px 13px;font-size:13.5px;line-height:1.75;white-space:pre-wrap;}
+.hint{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+.cu-form{display:grid;grid-template-columns:110px 140px 1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+input[type=text],input[type=date],select{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;width:100%;}
+input:focus,select:focus{outline:none;border-color:var(--red);}
+.cu-actions{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+.btn{border:1px solid var(--red);background:var(--red);color:#fff;border-radius:8px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:inherit;}
+.btn:hover{background:var(--red-dark);}
+.btn.ghost{background:#fff;color:var(--muted);border-color:var(--line);}
+.btn.ghost:hover{color:var(--red);border-color:var(--red);}
+.del{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:6px;padding:3px 9px;cursor:pointer;font-size:12px;}
+.del:hover{color:var(--red);border-color:var(--red);}
+.empty{color:var(--muted);font-size:14px;padding:18px 4px;}
+footer{max-width:1080px;margin:0 auto;padding:0 16px 40px;font-size:12px;color:var(--muted);line-height:1.9;}
+footer code{background:#eee9e4;border-radius:4px;padding:1px 5px;font-size:11.5px;}
+#toast{position:fixed;right:20px;bottom:20px;background:#2e8b57;color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;}
+#toast.on{opacity:1;}
+</style>
+</head>
+<body>
+<header>
+<h1>图推五步骤与考点方法</h1>
+<div class="sub">位置 → 样式 → 属性 → 数量 → 特殊 ｜ 图形推理 · 2027 国考行政执法类</div>
+<div class="sub">来源：刘文超《判断推理系统课配套讲义》第一章 图形推理（P2–32，第一至第七节）｜〔通行口径〕为公考通用补充，非讲义原文</div>
+<div id="stat">—</div>
+</header>
+<nav>
+<button class="tb active" data-tab="总">总览</button>
+<button class="tb" data-tab="1">① 位置</button>
+<button class="tb" data-tab="2">② 样式</button>
+<button class="tb" data-tab="3">③ 属性</button>
+<button class="tb" data-tab="4">④ 数量</button>
+<button class="tb" data-tab="5">⑤ 特殊</button>
+<button class="tb" data-tab="我">我的错题 <span id="myCnt">0</span></button>
+<span class="spacer"></span>
+<input id="q" type="text" placeholder="搜索：平移 / 黑白运算 / 笔画数">
+<button id="quickAdd">＋ 记一条</button>
+</nav>
+<main>
+<section id="tab-总" class="active"></section>
+<section id="tab-1"></section>
+<section id="tab-2"></section>
+<section id="tab-3"></section>
+<section id="tab-4"></section>
+<section id="tab-5"></section>
+<section id="tab-我">
+<div class="block">
+<h2>我的错题规律 · 每次图推做错记一条</h2>
+<div class="hint">重点记「错在哪一步」：是没进对步骤，还是进了步骤但数错/看漏。攒够 10 条就能看出你的固定漏洞。数据存在本机浏览器，重要内容用「导出」备份。</div>
+<div class="cu-form">
+<input id="f-date" type="date">
+<select id="f-step"><option value="① 位置">① 位置</option><option value="② 样式">② 样式</option><option value="③ 属性">③ 属性</option><option value="④ 数量">④ 数量</option><option value="⑤ 特殊">⑤ 特殊</option><option value="空间类">空间类</option><option value="步骤进对了但看错">步骤对·看错</option></select>
+<input id="f-src" type="text" placeholder="题目（如 粉笔·图推 第3题）">
+<input id="f-why" type="text" placeholder="错因（如 没想到数笔画）">
+<input id="f-act" type="text" placeholder="下次动作">
+</div>
+<div class="cu-actions"><button class="btn" id="addBtn">添加</button><button class="btn ghost" id="expBtn">导出 JSON</button><button class="btn ghost" id="impBtn">导入 JSON</button><input id="impFile" type="file" accept=".json" style="display:none"></div>
+<div id="myTable"></div>
+</div>
+</section>
+</main>
+<footer>
+<p>用法：做题时按 ①→②→③→④→⑤ 顺序走，每步 45 秒，走完没结果就跳。做错的题当天补进「我的错题」。</p>
+<p>文件：<code>F:\DSH-WORK\20_国考备考\复习卡片\图推五步骤与考点方法.html</code>　｜　建表 2026-10-30</p>
+</footer>
+<div id="toast"></div>
+<script>
+const BLOCKS=[{"t":"总","h":"为什么要有五步骤","kind":"note","text":"图推丢分的真正原因不是「不会」，是「顺序乱」：看到一个复杂图形，先从数量开始数，数到一半发现不对，再换属性，时间就没了。\n五步骤是强制顺序：**位置 → 样式 → 属性 → 数量 → 特殊**。前一步判不出来才进下一步，一次只看一层。**每步 45 秒，走完五步还没结果就跳。**"},{"t":"总","h":"第一步判定：元素组成决定从哪一步进","kind":"table","cols":["看到的特征","从哪一步进","绝对不会是"],"rows":[["元素**组成相同**（图形一模一样，只是位置/朝向变了）","第 1 步 位置规律","数量、属性"],["元素**组成相似**（线条重复出现，轮廓差不多）","第 2 步 样式规律","位置"],["元素组成**不相同、不相似**，但图形很「规整」","第 3 步 属性规律","位置、样式"],["元素组成**杂乱**，但能数出个数/条数/封闭空间","第 4 步 数量规律","位置"],["上面四步都判不出来，或图里有小点/小箭头/黑白块","第 5 步 特殊规律","—"],["**立体图**（三视图、截面、展开图、拼合）","直接跳空间类","五步骤不适用"]]},{"t":"总","h":"看图方式（讲义原文，先定怎么看再动手）","kind":"table","cols":["题型","怎么看"],"rows":[["一组图","从左往右**顺着看**；也可以**跳着看**（图1、3、5 一组，图2、4、6 一组），这种考法极少"],["两组图","**分开看**：第一组找规律，第二组用规律"],["九宫格","**横着看**最常见：第一行找规律，第二行验证，第三行用。横着看没规律再考虑竖着看。（「米」字型、「S」字型极少）"],["分组分类","国考 10 道里约 **5 道**是分组分类：给 6 个图形分成两组（如①②③ / ④⑤⑥），**每组各有不同规律**"],["空间类（折纸盒）","不需要强空间想象，用方法转化成平面思维（相对面、箭头法）"],["其他","三视图、立体拼合、截面图"]]},{"t":"总","h":"国考真题分布（讲义原文 + 本地数据）","kind":"list","items":["分组分类在国考图推里约占一半，**做分组分类要先找「两组各自成立的规律」**，不是找统一的规律。","空间类（三视图/截面/展开/拼合）国考每年 **1~2 题**，本阶段策略：**只记两条铁律，其余直接蒙**。","讲义原话：「数量规律内容多，**笔画数是重点**」。"]},{"t":"总","h":"五步骤速查（背这一页）","kind":"code","text":"① 位置：组成相同 → 平移（方向：上下/左右/斜对角线；绕圈顺逆时针）／旋转翻转\n② 样式：组成相似·线条重复 → 加减同异（加/减/求异/求同）／黑白运算（轮廓相同、内部颜色不同）\n③ 属性：组成不同但规整 → 对称性（轴对称方向·数量／中心对称180°）／曲直性（全直线·全曲线）／开闭性（全封闭·留小开口）\n④ 数量：杂乱 → 点（线条交叉明显）／线（多边形单一直线→直线；圆·弧→曲线；笔画数）／面（封闭空间，面是白的黑的不是）／素（多个独立小图形：种类·个数·替换）\n⑤ 特殊：功能元素（点·箭头的标记作用）／图形间关系（相离·相交）／空间类（六面体相对面、四面体箭头法、三视图、截面、拼合）"},{"t":"1","h":"第 1 步 · 位置规律","kind":"note","text":"**题型特征（讲义原文）：元素组成相同。**\n图形本身一模一样，只是位置、朝向变了——这就是位置规律，不用再看别的。"},{"t":"1","h":"考点一：平移","kind":"table","cols":["维度","要看什么"],"rows":[["**方向**","直线方向：上下、左右、**斜对角线**；绕圈方向：**顺时针 / 逆时针**"],["**步数**","每步移动几格。常见恒定步数；也考递增递减"],["**超出边界**","走出图案边界的元素从对面绕回来（这是形状看起来「完全变了」的原因）"]]},{"t":"1","h":"考点二：旋转与翻转","kind":"table","cols":["类型","判定"],"rows":[["旋转","整体转动固定角度（90°/180°）；分**顺时针**和**逆时针**"],["翻转（轴对称）","左右翻转、上下翻转；翻转后图形**左右或上下相反**，旋转则不会"],["区分口诀〔通行口径〕","旋转改变朝向但**不改手性**；翻转**改变手性**（左右手互换）"]]},{"t":"1","h":"做题动作（讲义 + 实战）","kind":"list","items":["**只跟一个元素走**：挑最靠边、最好认的那个黑块/元素，看它在下一图落在哪，方向和步数立刻出来。","**别整块看形状**：整体平移后形状会变，形状变了不等于规律变了。","**蜂窝/六边形网格**：移动方向有 6 个（上/下/左上/左下/右上/右下），斜向走就是沿一条轴走一格。","**分组分类题**：两组各自有自己的平移方向或步数，不要找统一规律。"]},{"t":"1","h":"易错","kind":"list","items":["❗把「整体平移后形状改变」误判成「数量变化」→ 回到元素组成去确认。","❗九宫格里横向没规律就死磕，忘了看**竖着**和**斜对角线**。","❗步数算成「格」还是「元素个数」要统一，别一次数格一次数个。"]},{"t":"2","h":"第 2 步 · 样式规律","kind":"note","text":"**特征（讲义原文）：元素组成相似（线条重复出现）。**\n图形轮廓大致一样，但线条有增减、有叠加——走样式规律。"},{"t":"2","h":"考点一：加减同异","kind":"table","cols":["类型","做法"],"rows":[["相加","两图叠加，保留全部线条"],["相减","两图相减，去掉相同的部分"],["**求异（去同求异）**","两图对比，**去掉相同的线，保留不同的线**"],["**求同（去异求同）**","两图对比，**只保留相同的线，去掉不同的线**"]]},{"t":"2","h":"考点二：黑白运算","kind":"table","cols":["项","内容"],"rows":[["**特征**","图形轮廓和分隔区域**相同**，只是**内部颜色不同**"],["**方法**","**相同位置**做运算：黑+黑=？、黑+白=？、白+白=？（同一种组合固定对应一种结果）"],["关键","先在**同一位置**找出对应关系，再套用到别的格子；**不要跨位置找规律**"]]},{"t":"2","h":"做题动作","kind":"list","items":["先判断是「线条增减」还是「颜色运算」：线条有增减走加减同异，只有颜色变走黑白运算。","黑白运算**必须在相同位置核**：挑一个格子，从第一图到第二图看它变了什么，得出规则，再用第三图验证。","黑白运算的题**轮廓一定完全一样**，如果轮廓不一样，那不是黑白运算。"]},{"t":"2","h":"易错","kind":"list","items":["❗黑白运算和「黑白块的平移」搞混：**平移是整块动，运算是同一格颜色变**。先看轮廓是否完全相同。","❗求同/求异方向做反：求异=留不同的，求同=留相同的，写下来再选。"]},{"t":"3","h":"第 3 步 · 属性规律","kind":"note","text":"位置和样式都判不进（图形组成不同、线条也不重复），但整体看着**规整**——走属性规律。属性规律是国考图推的**高频送分区**。"},{"t":"3","h":"考点一：对称性","kind":"table","cols":["类型","判定要点"],"rows":[["**轴对称**","看**对称轴方向**（横/竖/斜）、**对称轴数量**（1条还是多条）"],["**中心对称**","图形**旋转 180° 后和原图完全重合**"],["组合考法","既是轴对称又是中心对称；或按对称轴方向分组（分组分类极爱考）"]]},{"t":"3","h":"考点二：曲直性","kind":"table","cols":["类型","判定要点"],"rows":[["**题目特征（讲义原文）**","题干图形由**全曲线图**或**全直线图**构成"],["全曲线","图里只有曲线，没有直线"],["全直线","图里只有直线，没有曲线"],["混合","既有曲线又有直线（常用于分组分类，按曲直混合方式分组）"]]},{"t":"3","h":"考点三：开闭性","kind":"table","cols":["类型","判定要点"],"rows":[["**特征（讲义原文）**","完整的图形**留了小开口**，可以考虑开闭性"],["全封闭","图形完全封闭，没有缺口"],["全开放","图形有开口，不封闭"]]},{"t":"3","h":"做题动作","kind":"list","items":["**先看对称**：图形规整的第一反应就是数对称轴，横/竖/斜分方向数。","对称轴**方向 + 数量**两个维度都要看，只看方向会漏一半。","带开口的、不封闭的图，先想开闭性；全直线或全曲线的图，先想曲直性。","分组分类题：常按「对称/不对称」「对称轴方向」「曲直」「开闭」把 6 个图分成两组。"]},{"t":"3","h":"易错","kind":"list","items":["❗只看轴对称忘了中心对称（180°重合）。","❗把「有对称轴」当成「都是轴对称」，其实有的图只有中心对称。"]},{"t":"4","h":"第 4 步 · 数量规律","kind":"note","text":"**题型特征（讲义原文）：元素组成不相同、不相似，且观察属性无规律，数量规律明显。**\n到这一步说明图形是「乱」的，只能靠数。**数是最后手段，也是最耗时的，数之前先定好数什么。**"},{"t":"4","h":"考点一：点","kind":"table","cols":["项","内容"],"rows":[["**特征图（讲义原文）**","**线条交叉明显**"],["数什么","交点数、线条与线条的交点、特殊交点（切点、端点）"]]},{"t":"4","h":"考点二：线","kind":"table","cols":["类型","特征图（讲义原文）"],"rows":[["**直线数**","**多边形、单一直线**"],["**曲线数**","**曲线图形**（全曲线图、圆、弧）"],["**笔画数（特殊考点）**","讲义原话：数量规律内容多，**笔画数是重点**"],["注意","线数量包括直线、曲线和笔画数"]]},{"t":"4","h":"考点三：面","kind":"table","cols":["项","内容"],"rows":[["**什么是面（讲义原文）**","**封闭空间**。**面是白的，黑的不是**"],["什么时候数面","图形被分割成多个封闭区块，且区块数量明显变化"],["易错","黑色块不算面；线条没闭合围出的区域也不算面"]]},{"t":"4","h":"考点四：素","kind":"table","cols":["项","内容"],"rows":[["**特征（讲义原文）**","**多个独立小图形**"],["1","元素**种类**（有几种）"],["2","元素**个数**（各有几个）"],["3","元素**替换**（一种元素等于几个另一种元素）"]]},{"t":"4","h":"做数量题的纪律（这是你 10-29 丢分最多的一步）","kind":"list","items":["**数之前先说一句「我数什么」**：点数、线数、面数、素，选一个，数到底。不许数到一半换。","**数出来的数要能形成序列**（1,2,3,4 或 2,4,6,8 或恒定），形成不了就换下一个。","**笔画数**是讲义点名的重点，见到一笔能画成的图先想笔画。","图形一复杂就蒙的根源不是复杂，是**没定好数什么**——复杂只会让数变慢，不会让你数错。"]},{"t":"5","h":"第 5 步 · 特殊规律","kind":"note","text":"前四步都判不出来，或者图里有**小点、小箭头、黑白块**这类「标记物」——走特殊规律。"},{"t":"5","h":"考点一：功能元素","kind":"table","cols":["元素","看什么（讲义原文）"],"rows":[["**点**","① 观察**点对其他图形的标记作用** ② 观察**点与点之间的关系**"],["箭头〔通行口径〕","箭头指向哪个图形/哪条边，指向关系就是规律"],["黑白块〔通行口径〕","黑白块的相对位置关系，或黑块围出的形状"]]},{"t":"5","h":"考点二：图形间关系","kind":"table","cols":["关系","含义"],"rows":[["**相离（讲义原文）**","图形间**没有公共部分**"],["相交〔通行口径〕","有公共部分；再分**面相交**（重合一块面积）、**线相交**（共一条边）、**点相交/相切**"],["包含〔通行口径〕","一个图形完全在另一个里面"]]},{"t":"5","h":"考点三：其他规律","kind":"list","items":["讲义单列了「其他规律」章节：这类题规律不固定，靠前四步筛掉后剩下的可能性去试。","遇到「试什么都不是」的题，**先跳过**，最后回来只剩 1~2 分钟时再蒙——别在一道题上耗 3 分钟。"]},{"t":"5","h":"空间类（国考每年 1~2 题，策略：只记铁律）","kind":"table","cols":["类型","关键方法"],"rows":[["**六面体·相对面**","判断相对面：① **同行或同列相隔一个面** ② **「Z」字形两端** ③ 紧邻 Z 字中线的面。应用：**一组相对面同时出现在选项里 → 直接排除**"],["**四面体/八面体**","展开图中**构成一条直线的两条边，折合后是同一条边**。解题技巧：**箭头法**（对面画箭头，判定左、右、下三个方向的面，不满足位置关系即错）"],["**三视图**","三个角度：**主视图**（正面）、**俯视图**（头顶向下）、**左视图**（左侧）。⚠ 出题人不严格按左/俯/主考，会考「从右往左」等角度。解题原则：**观察到的三视图都是平面图**"],["**截面图**","给一个立体图，问哪项能/不能成为其截面。**铁律：正方体 6 个面 → 截面最多六边形，绝不可能是七边形**"],["**立体拼合**","**凹凸有致：有凹必有凸，有凸必有凹**。先数块数再看凹凸"]]},{"t":"5","h":"空间类的取舍（P2 已定策略）","kind":"list","items":["立体拼装、截面、正方体展开 —— 在本阶段**战略放弃**，直接蒙。国考每年 1~2 题，投入产出比最低。","只保留两条铁律：**正方体截面最多六边形**；**拼合先数块数再看凹凸**。","折叠类如果要做，只用**箭头法**和**相对面排除**，不靠空间想象。","省下的时间给言语和资料——那里每分钟能换的分多得多。"]},{"t":"我","h":"我的错题规律（自己补进来）","kind":"note","text":"每次图推做错，把「错在哪一步」记进来：是没进对步骤（位置/样式/属性/数量/特殊），还是进了步骤但数错了/看漏了。攒到一定量你会看到自己的固定漏洞。"}];
+const LSKEY="gktu.v1.mine";
+const DAY_CUTOFF_HOUR=6;
+function pad(n){return String(n).padStart(2,"0");}
+function logicalToday(){var t=new Date();t.setHours(t.getHours()-DAY_CUTOFF_HOUR);return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate());}
+function load(){try{var v=localStorage.getItem(LSKEY);return v?JSON.parse(v):[];}catch(e){return [];}}
+function save(v){try{localStorage.setItem(LSKEY,JSON.stringify(v));}catch(e){}}
+let MY=load(); let curTab="总";
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>");}
+function plain(b){var s=b.h||"";if(b.items)s+=" "+b.items.join(" ");if(b.text)s+=" "+b.text;if(b.note)s+=" "+b.note;if(b.cols)s+=" "+b.cols.join(" ");if(b.rows)s+=" "+b.rows.map(function(r){return r.join(" ");}).join(" ");return s.replace(/\*\*/g,"");}
+function blockHTML(b){var body="";
+ if(b.kind==="table"){body="<table><thead><tr>"+b.cols.map(function(c){return "<th>"+inline(c)+"</th>";}).join("")+"</tr></thead><tbody>"+b.rows.map(function(r){return "<tr>"+r.map(function(c){return "<td>"+inline(c)+"</td>";}).join("")+"</tr>";}).join("")+"</tbody></table>";if(b.note)body+="<div class=\"note\">"+inline(b.note)+"</div>";}
+ else if(b.kind==="list"){body="<ul>"+b.items.map(function(i){return "<li>"+inline(i)+"</li>";}).join("")+"</ul>";}
+ else if(b.kind==="code"){body="<pre>"+esc(b.text)+"</pre>";}
+ else if(b.kind==="note"){body="<div class=\"note\">"+inline(b.text)+"</div>";}
+ return "<div class=\"block\"><h2>"+inline(b.h)+"</h2>"+body+"</div>";}
+function renderTab(tab){
+ if(tab==="我"){renderMy();return;}
+ var el=document.getElementById("tab-"+tab);
+ var q=(document.getElementById("q").value||"").trim().toLowerCase();
+ var list=BLOCKS.filter(function(b){return b.t===tab;});
+ if(q)list=list.filter(function(b){return plain(b).toLowerCase().indexOf(q)>=0;});
+ el.innerHTML=list.length?list.map(blockHTML).join(""):"<div class=\"block\"><div class=\"empty\">没有匹配「"+esc(q)+"」的内容</div></div>";}
+function renderMy(){
+ var el=document.getElementById("myTable");
+ document.getElementById("myCnt").textContent=MY.length;
+ if(!MY.length){el.innerHTML="<div class=\"empty\">还没有记录。图推做错时，记一条「错在哪一步」。</div>";return;}
+ var q=(document.getElementById("q").value||"").trim().toLowerCase();
+ var rows=MY.map(function(r,i){return {r:r,i:i};});
+ if(q)rows=rows.filter(function(o){return ([o.r.date,o.r.step,o.r.src,o.r.why,o.r.act].join(" ")).toLowerCase().indexOf(q)>=0;});
+ var h="<table><thead><tr><th style=\"width:92px\">日期</th><th style=\"width:120px\">错在哪一步</th><th>题目</th><th>错因</th><th>下次动作</th><th style=\"width:56px\">操作</th></tr></thead><tbody>";
+ h+=rows.map(function(o){return "<tr><td>"+esc(o.r.date)+"</td><td>"+inline(o.r.step)+"</td><td>"+inline(o.r.src)+"</td><td>"+inline(o.r.why)+"</td><td>"+inline(o.r.act)+"</td><td><button class=\"del\" data-i=\""+o.i+"\">删除</button></td></tr>";}).join("");
+ h+="</tbody></table>"; el.innerHTML=h;
+ el.querySelectorAll(".del").forEach(function(b){b.onclick=function(){var i=parseInt(b.dataset.i);if(!confirm("删除这条记录？"))return;MY.splice(i,1);save(MY);renderMy();stat();toast("已删除");};});}
+function stat(){var total=BLOCKS.reduce(function(a,b){return a+(b.rows?b.rows.length:(b.items?b.items.length:1));},0);
+ document.getElementById("stat").textContent="内置 "+total+" 条要点 · 我的错题 "+MY.length+" 条 · 7 个页签";
+ document.getElementById("myCnt").textContent=MY.length;}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(window.__tt);window.__tt=setTimeout(function(){t.classList.remove("on");},1600);}
+function switchTab(tab){curTab=tab;document.querySelectorAll("nav button.tb").forEach(function(b){b.classList.toggle("active",b.dataset.tab===tab);});document.querySelectorAll("main section").forEach(function(s){s.classList.toggle("active",s.id==="tab-"+tab);});renderTab(tab);}
+document.querySelectorAll("nav button.tb").forEach(function(b){b.onclick=function(){switchTab(b.dataset.tab);};});
+document.getElementById("q").oninput=function(){renderTab(curTab);};
+document.getElementById("quickAdd").onclick=function(){switchTab("我");var w=document.getElementById("f-why");w.focus();w.scrollIntoView({behavior:"smooth",block:"center"});};
+document.getElementById("addBtn").onclick=function(){
+ var why=document.getElementById("f-why").value.trim();
+ if(!why){toast("「错因」不能为空");document.getElementById("f-why").focus();return;}
+ MY.push({date:document.getElementById("f-date").value||logicalToday(),step:document.getElementById("f-step").value,src:document.getElementById("f-src").value.trim(),why:why,act:document.getElementById("f-act").value.trim()});
+ save(MY);["f-src","f-why","f-act"].forEach(function(id){document.getElementById(id).value="";});renderMy();stat();toast("已添加");};
+document.getElementById("expBtn").onclick=function(){var blob=new Blob([JSON.stringify(MY,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="图推错题_"+logicalToday()+".json";a.click();URL.revokeObjectURL(a.href);toast("已导出");};
+document.getElementById("impBtn").onclick=function(){document.getElementById("impFile").click();};
+document.getElementById("impFile").onchange=function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var arr=JSON.parse(rd.result);if(!Array.isArray(arr))throw new Error("格式不对");MY=MY.concat(arr);save(MY);renderMy();stat();toast("导入 "+arr.length+" 条");}catch(err){toast("导入失败："+err.message);}};rd.readAsText(f);e.target.value="";};
+document.getElementById("f-date").value=logicalToday();
+stat();renderTab("总");
+</script>
+</body>
+</html>
