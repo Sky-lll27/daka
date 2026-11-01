@@ -251,8 +251,11 @@ function load() {
   } catch(e) {}
   return { tasks: [], checkins: {} };
 }
-function save() { localStorage.setItem(KEY, JSON.stringify(data));
-  /* 本地存完顺带推云端 */
+function save(localOnly) { localStorage.setItem(KEY, JSON.stringify(data));
+  /* localOnly=true 时只写本机，不推云端（用于初始化示例数据，防止覆盖云端） */
+  if (localOnly) return;
+  /* 云端已有数据、本地却是空的 → 不推，避免空数据覆盖云端 */
+  if (!data.tasks || !data.tasks.length) return;
   try { if (typeof CloudSync !== 'undefined') { CloudSync.push({ data: data }); } } catch(e) {}
 }
 
@@ -481,7 +484,7 @@ if (!data.tasks.length && !localStorage.getItem(KEY + '_init')) {
     { id: 3, name: '阅读 30 分钟' },
   ];
   localStorage.setItem(KEY + '_init', '1');
-  save();
+  save(true);   /* 只写本机：示例任务绝不推云端 */
 }
 
 render();
