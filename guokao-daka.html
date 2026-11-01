@@ -406,6 +406,7 @@ function tickHeader(){
 /* ================= 今日任务 ================= */
 const GROUPS=[["x","行测任务"],["sl","申论任务"],["c","常识 / 复盘"]];
 function renderToday(){
+  if(!PLAN || !PLAN.length) return;   /* 计划未载入时不渲染，避免读空数组 */
   const pick=document.getElementById("datePick");
   pick.value=curDate;pick.min=PLAN[0].d;pick.max=PLAN[PLAN.length-1].d;
   const idx=PLAN.findIndex(p=>p.d===curDate);
@@ -512,6 +513,7 @@ document.getElementById("datePick").onchange=e=>{curDate=e.target.value;renderTo
 /* ================= 倒计时 ================= */
 function fmtTarget(s){return s.replace("T"," ").slice(0,16);}
 function renderCountdowns(){
+  if(!PLAN || !PLAN.length) return;
   const grid=document.getElementById("cdGrid");
   grid.innerHTML="";
   CDS.forEach(cd=>{
@@ -583,6 +585,7 @@ document.getElementById("addCd").onclick=()=>{
 /* ================= 任务总表 ================= */
 let ovFilter="全部";
 function renderFilters(){
+  if(!PLAN || !PLAN.length) return;
   const stages=["全部","一","二","三","四","五","考试"];
   const box=document.getElementById("filters");
   box.innerHTML="";
@@ -595,6 +598,7 @@ function renderFilters(){
   });
 }
 function renderOverview(){
+  if(!PLAN || !PLAN.length) return;
   const tb=document.getElementById("ovBody");
   tb.innerHTML="";
   PLAN.forEach(p=>{
@@ -616,6 +620,7 @@ function renderOverview(){
 
 /* ================= 设置 ================= */
 function renderSettings(){
+  if(!PLAN || !PLAN.length) return;
   document.getElementById("planJson").value=JSON.stringify(PLAN,null,1);
 }
 function flash(id,txt,ok){
@@ -721,6 +726,7 @@ function tmRender(){
   tmDisplay.classList.toggle("run",TM.running);
 }
 function tmStats(){
+  if(!PLAN || !PLAN.length) return;
   const st=CHECKINS[todayStr()]||{};
   document.getElementById("tmPomos").textContent=st.pomos||0;
   document.getElementById("tmMins").textContent=Math.round((st.studySec||0)/60);
