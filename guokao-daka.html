@@ -241,7 +241,7 @@
       <p class="hint" style="margin:0 0 4px;">填「做对数 / 总题数」，例：资料 17 / 20。当天多轮练习就填合计数。</p>
       <table class="acc-table"><thead><tr><th>模块</th><th>做对</th><th>总题数</th><th>正确率</th><th>目标线</th></tr></thead><tbody id="accBody"></tbody></table>
     </div>
-    <div class="hint">勾选即自动保存到本浏览器（localStorage）。换浏览器/换电脑前，先到「设置」导出打卡记录备份。</div>
+    <div class="hint">勾选后自动保存，并同步到云端（手机、电脑共用一份）。底部状态栏可查看同步状态。</div>
   </section>
 
   <!-- ============ 倒计时 ============ -->
@@ -312,19 +312,19 @@
     <div class="card">
       <h3 style="margin-bottom:8px;">打卡记录</h3>
       <div class="set-row">
-        <button class="btn btn-ghost" id="exportBtn">导出打卡记录(.json)</button>
+        <button class="btn btn-ghost" id="exportBtn">导出本机副本(.json)</button>
         <button class="btn btn-ghost" id="importShow">导入打卡记录</button>
         <button class="btn btn-ghost" id="wipeBtn" style="color:var(--red);">清空全部数据</button>
       </div>
       <div id="importBox" style="display:none; margin-top:10px;">
-        <textarea class="json" id="importJson" style="min-height:120px;" placeholder="把导出的 JSON 粘贴到这里"></textarea>
+        <textarea class="json" id="importJson" style="min-height:120px;" placeholder="把导出的 JSON 粘贴到这里（会同时覆盖云端）"></textarea>
         <div class="set-row"><button class="btn btn-primary" id="importBtn">确认导入</button></div>
       </div>
       <div class="msg" id="dataMsg"></div>
     </div>
   </section>
 </main>
-<footer>单文件离线页 · 数据仅存本浏览器 · 完整版 v1.1 · 换设备先到「设置」导出备份</footer>
+<footer>数据存于云端（私有仓库）· 换设备登录同一令牌即可读取 · 完整版 v1.2</footer>
 
 <script src="sync.js"></script>
 <script>
