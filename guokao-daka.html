@@ -918,9 +918,21 @@ document.getElementById("accRange").onchange=renderStats;
         if(!d) return;
         /* 注意：这里直接写 localStorage，不走 save()，否则会再次触发推送形成循环 */
         try{
-          if(d.plan){ PLAN=d.plan; localStorage.setItem(LS.plan,JSON.stringify(PLAN)); }
-          if(d.checkins){ CHECKINS=d.checkins; localStorage.setItem(LS.ck,JSON.stringify(CHECKINS)); }
-            if(d.countdowns){ CDS=d.countdowns; localStorage.setItem(LS.cd,JSON.stringify(CDS)); }
+          /* 校验：只有结构合法的数据才写入本地，防止云端被写坏时污染本机 */
+          var okPlan = Array.isArray(d.plan) && d.plan.length > 0 &&
+                       d.plan[0] && typeof d.plan[0].d === 'string' && d.plan[0].d.length > 0;
+          if(d.plan && !okPlan){
+            console.warn('[sync] 云端 plan 结构异常，已拒绝写入本地');
+            if(!booted && typeof hideLoading === 'function'){
+              booted = true;
+              hideLoading();
+              showLoading('云端计划数据异常（已保护本机缓存）。请到「设置」→「清空全部数据」后重新同步，或联系助手修复云端。');
+            }
+            return;
+          }
+          if(okPlan){ PLAN=d.plan; localStorage.setItem(LS.plan,JSON.stringify(PLAN)); }
+          if(d.checkins && typeof d.checkins === 'object'){ CHECKINS=d.checkins; localStorage.setItem(LS.ck,JSON.stringify(CHECKINS)); }
+          if(Array.isArray(d.countdowns)){ CDS=d.countdowns; localStorage.setItem(LS.cd,JSON.stringify(CDS)); }
         }catch(e){}
         if(!booted && PLAN && PLAN.length){ booted=true; doneMark(); hideLoading(); bootRender(); return; }
         renderToday();renderOverview();renderCountdowns();renderSettings();tickHeader();
