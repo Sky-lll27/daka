@@ -902,7 +902,21 @@ document.getElementById("accRange").onchange=renderStats;
     var m=document.getElementById('bootMask');
     if(m) m.parentNode.removeChild(m);
   }
-  var booted=false; if(PLAN && PLAN.length){ booted=true; bootRender(); }
+  /* 校验本地计划是否真的可用：光有长度不够，53 个 null 也算"有长度" */
+  function planUsable(p){
+    return Array.isArray(p) && p.length > 0 &&
+           p[0] && typeof p[0].d === 'string' && p[0].d.length >= 8;
+  }
+  var booted=false;
+  if(!planUsable(PLAN)){
+    /* 本地缓存坏了（例如被写成 null 数组）→ 清掉，等云端重拉 */
+    try{
+      if(PLAN && PLAN.length){ console.warn('[boot] 本地计划缓存损坏，已清除'); }
+      localStorage.removeItem(LS.plan);
+      PLAN=[];
+    }catch(e){ PLAN=[]; }
+  }
+  if(planUsable(PLAN)){ booted=true; bootRender(); }
   else {
     showLoading('正在读取备考计划…');
     var done=false; window.doneMark=function(){done=true;};
