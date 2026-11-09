@@ -52,6 +52,13 @@ footer code{background:#eee9e4;border-radius:4px;padding:1px 5px;font-size:11.5p
 </style>
 </head>
 <body>
+<a href="./" id="hubBack" title="返回备考中心" style="
+  position:fixed; left:10px; top:10px; z-index:9997;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(0,0,0,.35); color:#fff; text-decoration:none;
+  display:flex; align-items:center; justify-content:center;
+  font-size:19px; line-height:1; font-family:system-ui,sans-serif;
+  -webkit-tap-highlight-color:transparent;">‹</a>
 <header>
 <h1>资料分析公式与例题</h1>
 <div class="sub">统计术语 · 速算技巧 · 增长率 · 增长量 · 比重 · 平均数倍数 ｜ 2027 国考行政执法类</div>
@@ -130,6 +137,39 @@ B = 整体现期量，b = 整体增速</pre></div><div class="block"><h2>两期�
 基期平均数 = 现期平均数 × (1+b)/(1+a)   （a=总量增速，b=份数增速）
 
 平均数增长率 = (a − b) ÷ (1 + b)</pre></div><div class="block"><h2>例：平均数（分数比较）</h2><div class="note">【真题】2013 年 1–4 月某市电影院线：1 月场次 10.91 万场、观众 3.50 百万人次；2 月 9.79、3.36；3 月 11.07、3.17；4 月 11.13、3.72。<br>问：2013 年 1–4 月平均每场电影观众人数最少的月份是？<br><br>做法：比 观众÷场次，不除出来，用分数比较<br>· 1 月 3.50/10.91、2 月 3.36/9.79、3 月 3.17/11.07、4 月 3.72/11.13<br>· 3 月<b>分子最小、分母最大</b> → 分数最小 → 选 <b>3 月</b><br><br><b>「分子最小分母最大」是最快的一档判断，别真去除。</b></div></div></section>
+
+<div class="block"><h2>⚠ 减少型特殊分数（模考①错点）</h2><pre>增长 r≈1/n：增长量 = 现期 ÷ (n+1)
+减少 r≈1/n：减少量 = 现期 ÷ (n-1)      ← 分母变小，不是变大
+
+原理：现期 = 基期 × (1−r)，基期 = 现期 ÷ (1−1/n) = 现期 × n/(n-1)
+　　　减少量 = 基期 − 现期 = 现期 ÷ (n-1)
+
+例：某量减少 5%（1/20），现期 190 → 减少量 = 190 ÷ 19 = 10</pre></div>
+<div class="block"><h2>⚠ 平均数增长率（模考①错点）</h2><pre>平均数增长率 = (a − b) ÷ (1 + b)
+
+a = 总量（分子）的增速
+b = 份数（分母）的增速
+
+注意：分母是 (1+b)，不是 (1+a)，也不是 (1+a)(1+b)。
+
+例：人均收入 = 总收入 ÷ 人数
+　　总收入增速 a = 8%，人数增速 b = 3%
+　　人均收入增长 = (8%−3%)÷(1+3%) = 5%÷1.03 ≈ 4.85%</pre></div>
+<div class="block"><h2>⚠ 特殊分数只背到 1/20，超出的硬算</h2><pre>1/2 ~ 1/20 背熟就够（1.3%、2.3%、3.7% 这类不在表里）
+
+遇到不在表里的百分数：
+· r &lt; 2%  → 直接用「现期 × r」，误差 1~2%，选项差距通常 5~10%，可忽略
+· r ≥ 2%  → 硬算：现期 ÷ (1+r) × r
+
+别为了凑分数去猜 1/77、1/43 这种——猜错反而错得更远。</pre></div>
+<div class="block"><h2>⚠ 综合判断最后一题：直接蒙，不读题</h2><pre>资料每道大题的最后一道「综合判断」有四个选项要逐个验证，
+一题能吃掉 60~90 秒。
+
+正确做法：看到这类题，直接选一个走人（5 秒），把时间还给前面 3 题。
+错误做法：想放弃但还在犹豫——既不读题也不选，卡在那里最亏。
+
+模考①实测：20 题用 37 分钟（111 秒/题），超时 11 分钟，
+就是因为这类题在犹豫。目标 78 秒/题。</pre></div>
 <section id="tab-我">
 <div class="block">
 <h2>我的错题 · 记「公式套错」和「问句看反」</h2>
