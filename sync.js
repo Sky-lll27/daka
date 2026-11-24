@@ -14,6 +14,7 @@ var CloudSync = (function () {
 
   var slot = null;       // 本页负责的字段名，如 'guokao'
   var onRemote = null;   // 拉到云端数据后的回调
+  var mergeHook = null;  // 推送前的合并钩子：页面提供时，由它决定写入云端的字段（默认整块替换）
   var sha = null;        // 当前文件 sha，写入时必须带
   var timer = null;      // 防抖定时器
   var pending = null;    // 待推送的数据
@@ -164,7 +165,14 @@ var CloudSync = (function () {
       });
     }).then(function (cur) {
       var all = cur.all || {};
-      all[slot] = data;                       // 只改本页字段，不碰别的
+      var slotData = data;
+      if (mergeHook) {                        // 页面给了合并钩子：不让本机旧缓存整块盖掉云端
+        try {
+          var m = mergeHook(data, all[slot]);
+          if (m && typeof m === 'object') slotData = m;
+        } catch (e) { console.warn('[sync] merge hook 失败，退回整块替换', e); }
+      }
+      all[slot] = slotData;                   // 只改本页字段，不碰别的
       all.updatedAt = new Date().toISOString();
       var body = {
         message: 'sync: ' + slot + ' ' + new Date().toLocaleString('zh-CN'),
@@ -217,6 +225,7 @@ var CloudSync = (function () {
   function init(opts) {
     slot = opts.key;
     onRemote = opts.onRemote;
+    mergeHook = (typeof opts.merge === 'function') ? opts.merge : null;
     // 建状态栏
     var bar = document.createElement('div');
     bar.id = 'cs-bar';
