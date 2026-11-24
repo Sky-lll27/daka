@@ -326,7 +326,7 @@
 </main>
 <footer>数据存于云端（私有仓库）· 换设备登录同一令牌即可读取 · 完整版 v1.2</footer>
 
-<script src="sync.js"></script>
+<script src="sync.js?v=20261124b"></script>
 <script>
 /* ================= 默认数据：45天备考 + 考试日 ================= */
 const DEFAULT_PLAN=[];/* 计划已移至私有仓库，运行时从云端载入 */
@@ -340,6 +340,7 @@ function save(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(
   try{ if(typeof CloudSync!=='undefined' && PLAN && PLAN.length){ CloudSync.push({plan:PLAN,checkins:CHECKINS,countdowns:CDS}); } }catch(e){}
 }
 let PLAN=load(LS.plan,DEFAULT_PLAN);
+  let PLAN_EDITED=false;  /* 只有本页手动改过计划（导入/恢复默认/清空）才为 true */
 let CHECKINS=load(LS.ck,{});
 let CDS=load(LS.cd,DEFAULT_COUNTDOWNS);
 /* 计划与倒计时已移至私有仓库；本地为空时由云端载入 */
@@ -645,7 +646,7 @@ document.getElementById("savePlan").onclick=()=>{
     const v=JSON.parse(document.getElementById("planJson").value);
     if(!Array.isArray(v)||!v.length)throw new Error("需要是非空数组");
     v.forEach((p,i)=>{if(!p.d)throw new Error("第"+(i+1)+"条缺 d(日期)");});
-    PLAN=v;save(LS.plan,PLAN);
+    PLAN=v;PLAN_EDITED=true;save(LS.plan,PLAN);
     if(!findDay(curDate))curDate=PLAN[0].d;
     renderToday();renderOverview();tickHeader();
     flash("planMsg","已保存，共 "+PLAN.length+" 天",true);
@@ -653,7 +654,7 @@ document.getElementById("savePlan").onclick=()=>{
 };
 document.getElementById("resetPlan").onclick=()=>{
   if(!confirm("恢复默认45天国考计划？自定义的任务数据会被覆盖（打卡记录保留）。"))return;
-  PLAN=DEFAULT_PLAN;localStorage.removeItem(LS.plan);
+  PLAN=DEFAULT_PLAN;PLAN_EDITED=true;localStorage.removeItem(LS.plan);
   renderSettings();renderToday();renderOverview();tickHeader();
   flash("planMsg","已恢复默认计划",true);
 };
@@ -682,7 +683,7 @@ document.getElementById("importBtn").onclick=()=>{
 document.getElementById("wipeBtn").onclick=()=>{
   if(!confirm("清空全部打卡记录、倒计时自定义和任务数据修改？此操作不可恢复。"))return;
   localStorage.removeItem(LS.ck);localStorage.removeItem(LS.cd);localStorage.removeItem(LS.plan);
-  CHECKINS={};CDS=DEFAULT_COUNTDOWNS;PLAN=DEFAULT_PLAN;
+  CHECKINS={};CDS=DEFAULT_COUNTDOWNS;PLAN=DEFAULT_PLAN;PLAN_EDITED=true;
   renderSettings();renderToday();renderOverview();renderCountdowns();tickHeader();
   flash("dataMsg","已清空",true);
 };
@@ -928,6 +929,23 @@ document.getElementById("accRange").onchange=renderStats;
   if(typeof CloudSync!=='undefined'){
     CloudSync.init({
       key:'guokao',
+      merge:function(local,remote){
+        /* 推送前决定写什么：计划以云端为准（含助手写入的排期与 an 诊断），
+           本地只补云端没有的日期；只有本页手动导入/恢复默认/清空过计划，才写本地计划。
+           打卡记录与倒计时始终用本地（那是本页唯一的写入口）。 */
+        var out={plan:local.plan,checkins:local.checkins,countdowns:local.countdowns};
+        try{
+          if(!PLAN_EDITED && remote && Array.isArray(remote.plan) && remote.plan.length){
+            var cloudByD={};
+            remote.plan.forEach(function(r){ if(r&&r.d) cloudByD[r.d]=r; });
+            var merged=remote.plan.slice();
+            (local.plan||[]).forEach(function(r){ if(r&&r.d&&!cloudByD[r.d]) merged.push(r); });
+            merged.sort(function(a,b){ return (a&&a.d? a.d:'') < (b&&b.d? b.d:'') ? -1 : 1; });
+            out.plan=merged;
+          }
+        }catch(e){ console.warn('[merge] 计划合并失败，改用本地计划', e); }
+        return out;
+      },
       onRemote:function(d){
         if(!d) return;
         /* 注意：这里直接写 localStorage，不走 save()，否则会再次触发推送形成循环 */
@@ -944,7 +962,7 @@ document.getElementById("accRange").onchange=renderStats;
             }
             return;
           }
-          if(okPlan){ PLAN=d.plan; localStorage.setItem(LS.plan,JSON.stringify(PLAN)); }
+          if(okPlan){ PLAN=d.plan; localStorage.setItem(LS.plan,JSON.stringify(PLAN)); PLAN_EDITED=false; }
           if(d.checkins && typeof d.checkins === 'object'){ CHECKINS=d.checkins; localStorage.setItem(LS.ck,JSON.stringify(CHECKINS)); }
           if(Array.isArray(d.countdowns)){ CDS=d.countdowns; localStorage.setItem(LS.cd,JSON.stringify(CDS)); }
         }catch(e){}
