@@ -97,6 +97,34 @@ footer code{background:#eee9e4;border-radius:4px;padding:1px 5px;font-size:11.5p
         判断升降：a&gt;b 比重上升；a&lt;b 比重下降（只看增速，不用算）
 【倍数】现期倍数 = <span class="frac"><i>A</i><i>B</i></span> ；基期倍数 = <span class="frac"><i>A</i><i>B</i></span> × <span class="frac"><i>1+b</i><i>1+a</i></span>
 【平均数】平均数增长率 = <span class="frac"><i>a−b</i><i>1+b</i></span>   ← a=总量增速，b=份数增速</pre></div><div class="block"><h2>题目问什么 → 用哪个公式（按句子里的事来判）</h2><table><thead><tr><th>题干里出现这些字</th><th>题型</th><th>公式</th></tr></thead><tbody><tr><td>「增长了百分之几」「增速」「增幅」「回落/提高几个百分点」</td><td>增长率</td><td>r = <span class="frac"><i>现期</i><i>基期</i></span> − 1</td></tr><tr><td>「比……增长/减少多少（带单位）」「增加……万元」</td><td>增长量</td><td><span class="frac"><i>现期</i><i>1+r</i></span> × r</td></tr><tr><td>「比前年（隔一年）增长」</td><td>间隔增长率</td><td>r = r1+r2+r1×r2</td></tr><tr><td>「两类合成一类，求整体增速」</td><td>混合增长率</td><td>居中偏大（线段法）</td></tr><tr><td>「占……比重」「比重是多少」</td><td>现期比重</td><td><span class="frac"><i>A</i><i>B</i></span></td></tr><tr><td>「上年（基期）比重」</td><td>基期比重</td><td><span class="frac"><i>A</i><i>B</i></span> × <span class="frac"><i>1+b</i><i>1+a</i></span></td></tr><tr><td>「比重比去年上升/下降几个百分点」</td><td>两期比重差</td><td><span class="frac"><i>A</i><i>B</i></span> × <span class="frac"><i>a−b</i><i>1+a</i></span></td></tr><tr><td>「是……的几倍」「A 比 B 多几倍」</td><td>倍数</td><td><span class="frac"><i>A</i><i>B</i></span>（多几倍再减 1）</td></tr><tr><td>「平均每……」「人均」「单位面积」</td><td>平均数</td><td>总量/份数</td></tr><tr><td>「平均数的增速」</td><td>平均数增长率</td><td><span class="frac"><i>a−b</i><i>1+b</i></span></td></tr></tbody></table></div><div class="block"><h2>三条铁律（每天做资料前先念一遍）</h2><ul><li><b>先圈问句</b>：问的是<b>累计</b>还是<b>新增</b>？是<b>比重</b>还是<b>比重差</b>？圈错方向，算得再快也是错的。</li><li><b>一次算完不回头</b>：草稿写完整一行（截位 → 分数 → 一次除完 → 直接选），只有选项差 &lt;1% 才精算。</li><li><b>最后一题综合判断照旧放弃</b>：在草稿写「放弃」两个字，别花 70 秒去蒙。</li></ul></div></section>
+<div class="block"><h2>补充 · 2026-11-28 手写笔记里页面缺的 7 条</h2><pre>【① 交叉相乘比大小】分数比较第 ④ 条（原来只有"直除比较"）
+  比 a/b 与 c/d → 算 a×d 与 c×b，谁大原分数就大
+  例：58/81 与 61/85 → 58×85=<b>4930</b>，61×81=<b>4941</b> → 后者大
+  用途：四个选项比比重大小、两个增速比大小（两次乘法，15 秒，不产生小数误差）
+
+【② 乘法估算（凑整）】A×B ≈ A↑×B↓
+  99×101 ≈ 100×100；适用"两个因数都贴近整十/整百"的乘法
+
+【③ 翻番】一番＝2 倍，n 番＝2^n 倍
+  "翻两番"＝4 倍；"翻三番"＝8 倍。"增长了 X 倍" ≠ "翻了 X 番"，别看混
+
+【④ 顺差 / 逆差】外贸题先定符号
+  顺差（挣钱）＝出口 − 进口；逆差（赔钱）＝进口 − 出口
+
+【⑤ 拉动增长】拉动多少（个百分点）＝ 部分增长量 ÷ 整体基期值
+  ＝ [A/(1+r1) × r1] ÷ [B/(1+r2)]
+  问法："某部分拉动整体增长几个百分点"
+
+【⑥ 两期比重差：量级秒杀】页面有公式，但没有这条用法
+  比重差 = (A/B) × (a−b)/(1+a)
+  ∵ (A/B) 小于 1 且 1/(1+a) 小于 1  →  <b>|比重差| 小于 |a−b|</b>
+  用法：选项里比 |a−b| 还大的，<b>直接排除，不用算</b>
+  例：a−b = 2.1 个百分点，选项 3.5 / 2.8 / 1.2 → 只剩 1.2
+
+【⑦ 年均增长率：n 数"年份差"，不数"年份个数"】
+  2013→2015：中间没有基期年 → n = 2
+  若把 2012 当基期（跨 12/13/14/15）→ n = 3
+  题干给两期就问年均 → 先算年份差，别去数"写了几个年份"</pre></div></section>
 <section id="tab-术"><div class="block"><h2>基期与现期</h2><table><thead><tr><th>概念</th><th>含义</th><th>例子</th></tr></thead><tbody><tr><td>基期 / 基期量</td><td>作为对比参照的那个时期</td><td>「2017 年比 2016 年增长 6.8%」→ 2016 年是基期</td></tr><tr><td>现期 / 现期量</td><td>相对基期的那一期</td><td>上例里 2017 年是现期</td></tr><tr><td>找法</td><td>句子里的「比」字后面是基期</td><td>「A 比 B 增长」→ B 是基期</td></tr></tbody></table></div><div class="block"><h2>增长量 vs 增长率（最容易混的一对）</h2><table><thead><tr><th>项</th><th>增长量</th><th>增长率</th></tr></thead><tbody><tr><td>定义</td><td>现期与基期的<b>绝对差</b></td><td>增长量与基期的<b>比值</b></td></tr><tr><td>公式</td><td>现期 − 基期</td><td><span class="frac"><i>增长量</i><i>基期</i></span> = 现期/基期 − 1</td></tr><tr><td>单位</td><td><b>有单位</b>（万元、万人）</td><td><b>无单位</b>（%）</td></tr><tr><td>正负</td><td>有正负，负值=减少量</td><td>可为负，「减少率」本质是不带负号的增长率</td></tr></tbody></table></div><div class="block"><h2>高频易错：倍数和百分比不是一回事</h2><div class="note">「2017 年产值比 2016 年增长 280%」<br>=「增长 2.8 倍」<br>=「2017 年是 2016 年的 3.8 倍」<br><br><b>规律：是原来的 (1+r) 倍；比原来多 r 倍。</b><br>反问：A 比 B 增长 3.2 倍，A 是 B 的几倍？答案 4.2 倍。</div></div><div class="block"><h2>年均增长量与年均增长率</h2><pre>年均增长量 = <span class="frac"><i>现期量 − 基期值</i><i>间隔年份</i></span>
 
 年均增长率：现期量 = 基期量 × (1 + 年均增长率)^n
